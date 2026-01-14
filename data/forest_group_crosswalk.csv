@@ -1,0 +1,192 @@
+﻿East,West,Forest type code,Forest type,Forest group code,Forest group
+-,-,100,White / red / jack pine group,100,White / red / jack pine group
+E,-,101,Jack pine,100,White / red / jack pine group
+E,-,102,Red pine,100,White / red / jack pine group
+E,-,103,Eastern white pine,100,White / red / jack pine group
+E,-,104,Eastern white pine / eastern hemlock,100,White / red / jack pine group
+E,-,105,Eastern hemlock,100,White / red / jack pine group
+-,-,120,Spruce / fir group,120,Spruce / fir group
+E,-,121,Balsam fir,120,Spruce / fir group
+E,W,122,White spruce,120,Spruce / fir group
+E,-,123,Red spruce,120,Spruce / fir group
+E,-,124,Red spruce / balsam fir,120,Spruce / fir group
+E,W,125,Black spruce,120,Spruce / fir group
+E,-,126,Tamarack,120,Spruce / fir group
+E,-,127,Northern white-cedar,120,Spruce / fir group
+E,-,128,Fraser fir,120,Spruce / fir group
+E,-,129,Red spruce / Fraser fir,120,Spruce / fir group
+-,-,140,Longleaf / slash pine group,140,Longleaf / slash pine group
+E,-,141,Longleaf pine,140,Longleaf / slash pine group
+E,-,142,Slash pine,140,Longleaf / slash pine group
+-,-,150,Tropical softwoods group,150,Tropical softwoods group
+E,-,151,Tropical pines,150,Tropical softwoods group
+-,-,160,Loblolly / shortleaf pine group,160,Loblolly / shortleaf pine group
+E,-,161,Loblolly pine,160,Loblolly / shortleaf pine group
+E,-,162,Shortleaf pine,160,Loblolly / shortleaf pine group
+E,-,163,Virginia pine,160,Loblolly / shortleaf pine group
+E,-,164,Sand pine,160,Loblolly / shortleaf pine group
+E,-,165,Table mountain pine,160,Loblolly / shortleaf pine group
+E,-,166,Pond pine,160,Loblolly / shortleaf pine group
+E,-,167,Pitch pine,160,Loblolly / shortleaf pine group
+E,-,168,Spruce pine,160,Loblolly / shortleaf pine group
+-,-,170,Other eastern softwoods group,170,Other eastern softwoods group
+E,-,171,Eastern redcedar,170,Other eastern softwoods group
+E,-,172,Florida softwoods,170,Other eastern softwoods group
+-,-,180,Pinyon / juniper group,180,Pinyon / juniper group
+E,W,182,Rocky Mountain juniper,180,Pinyon / juniper group
+E,W,184,Juniper woodland,180,Pinyon / juniper group
+E,W,185,Pinyon / juniper woodland,180,Pinyon / juniper group
+-,-,200,Douglas-fir group,200,Douglas-fir group
+E,W,201,Douglas-fir,200,Douglas-fir group
+-,W,202,Port-Orford-cedar,200,Douglas-fir group
+-,W,203,Bigcone Douglas-fir,200,Douglas-fir group
+-,-,220,Ponderosa pine group,220,Ponderosa pine group
+E,W,221,Ponderosa pine,220,Ponderosa pine group
+-,W,222,Incense-cedar,220,Ponderosa pine group
+-,W,224,Sugar pine,220,Ponderosa pine group
+-,W,225,Jeffrey pine,220,Ponderosa pine group
+-,W,226,Coulter pine,220,Ponderosa pine group
+-,-,240,Western white pine group,240,Western white pine group
+-,W,241,Western white pine,240,Western white pine group
+-,-,260,Fir / spruce / mountain hemlock group,260,Fir / spruce / mountain hemlock group
+-,W,261,White fir,260,Fir / spruce / mountain hemlock group
+-,W,262,Red fir,260,Fir / spruce / mountain hemlock group
+-,W,263,Noble fir,260,Fir / spruce / mountain hemlock group
+-,W,264,Pacific silver fir,260,Fir / spruce / mountain hemlock group
+-,W,265,Engelmann spruce,260,Fir / spruce / mountain hemlock group
+-,W,266,Engelmann spruce / subalpine fir,260,Fir / spruce / mountain hemlock group
+-,W,267,Grand fir,260,Fir / spruce / mountain hemlock group
+-,W,268,Subalpine fir,260,Fir / spruce / mountain hemlock group
+-,W,269,Blue spruce,260,Fir / spruce / mountain hemlock group
+-,W,270,Mountain hemlock,260,Fir / spruce / mountain hemlock group
+-,W,271,Alaska-yellow-cedar,260,Fir / spruce / mountain hemlock group
+-,-,280,Lodgepole pine group,280,Lodgepole pine group
+-,W,281,Lodgepole pine,280,Lodgepole pine group
+-,-,300,Hemlock / Sitka spruce group,300,Hemlock / Sitka spruce group
+-,W,301,Western hemlock,300,Hemlock / Sitka spruce group
+-,W,304,Western redcedar,300,Hemlock / Sitka spruce group
+-,W,305,Sitka spruce,300,Hemlock / Sitka spruce group
+-,-,320,Western larch group,320,Western larch group
+-,W,321,Western larch,320,Western larch group
+-,-,340,Redwood group,340,Redwood group
+-,W,341,Redwood,340,Redwood group
+-,W,342,Giant sequoia,340,Redwood group
+-,-,360,Other western softwoods group,360,Other western softwoods group
+-,W,361,Knobcone pine,360,Other western softwoods group
+-,W,362,Southwestern white pine,360,Other western softwoods group
+-,W,363,Bishop pine,360,Other western softwoods group
+-,W,364,Monterey pine,360,Other western softwoods group
+-,W,365,Foxtail pine / bristlecone pine,360,Other western softwoods group
+-,W,366,Limber pine,360,Other western softwoods group
+-,W,367,Whitebark pine,360,Other western softwoods group
+-,W,368,Miscellaneous western softwoods,360,Other western softwoods group
+-,W,369,Western juniper,360,Other western softwoods group
+-,-,370,California mixed conifer group,370,California mixed conifer group
+-,W,371,California mixed conifer,370,California mixed conifer group
+-,-,380,Exotic softwoods group,380,Exotic softwoods group
+E,-,381,Scotch pine,380,Exotic softwoods group
+E,W,383,Other exotic softwoods,380,Exotic softwoods group
+E,-,384,Norway spruce,380,Exotic softwoods group
+E,-,385,Introduced larch,380,Exotic softwoods group
+-,-,390,Other softwoods group,390,Other softwoods group
+E,-,391,Other softwoods,390,Other softwoods group
+-,-,400,Oak / pine group,400,Oak / pine group
+E,-,401,Eastern white pine / northern red oak / white ash,400,Oak / pine group
+E,-,402,Eastern redcedar / hardwood,400,Oak / pine group
+E,-,403,Longleaf pine / oak,400,Oak / pine group
+E,-,404,Shortleaf pine / oak,400,Oak / pine group
+E,-,405,Virginia pine / southern red oak,400,Oak / pine group
+E,-,406,Loblolly pine / hardwood,400,Oak / pine group
+E,-,407,Slash pine / hardwood,400,Oak / pine group
+E,-,409,Other pine / hardwood,400,Oak / pine group
+-,-,500,Oak / hickory group,500,Oak / hickory group
+E,-,501,Post oak / blackjack oak,500,Oak / hickory group
+E,-,502,Chestnut oak,500,Oak / hickory group
+E,-,503,White oak / red oak / hickory,500,Oak / hickory group
+E,-,504,White oak,500,Oak / hickory group
+E,-,505,Northern red oak,500,Oak / hickory group
+E,-,506,Yellow-poplar / white oak / northern red oak,500,Oak / hickory group
+E,-,507,Sassafras / persimmon,500,Oak / hickory group
+E,-,508,Sweetgum / yellow-poplar,500,Oak / hickory group
+E,-,509,Bur oak,500,Oak / hickory group
+E,-,510,Scarlet oak,500,Oak / hickory group
+E,-,511,Yellow-poplar,500,Oak / hickory group
+E,-,512,Black walnut,500,Oak / hickory group
+E,-,513,Black locust,500,Oak / hickory group
+E,-,514,Southern scrub oak,500,Oak / hickory group
+E,-,515,Chestnut oak / black oak / scarlet oak,500,Oak / hickory group
+E,-,516,Cherry / white ash / yellow-poplar,500,Oak / hickory group
+E,-,517,Elm / ash / black locust,500,Oak / hickory group
+E,-,519,Red maple / oak,500,Oak / hickory group
+E,-,520,Mixed upland hardwoods,500,Oak / hickory group
+-,-,600,Oak / gum / cypress group,600,Oak / gum / cypress group
+E,-,601,Swamp chestnut oak / cherrybark oak,600,Oak / gum / cypress group
+E,-,602,Sweetgum / Nuttall oak / willow oak,600,Oak / gum / cypress group
+E,-,605,Overcup oak / water hickory,600,Oak / gum / cypress group
+E,-,606,Atlantic white-cedar,600,Oak / gum / cypress group
+E,-,607,Baldcypress / water tupelo,600,Oak / gum / cypress group
+E,-,608,Sweetbay / swamp tupelo / red maple,600,Oak / gum / cypress group
+E,-,609,Baldcypress / pondcypress,600,Oak / gum / cypress group
+-,-,700,Elm / ash / cottonwood group,700,Elm / ash / cottonwood group
+E,-,701,Black ash / American elm / red maple,700,Elm / ash / cottonwood group
+E,-,702,River birch / sycamore,700,Elm / ash / cottonwood group
+E,W,703,Cottonwood,700,Elm / ash / cottonwood group
+E,W,704,Willow,700,Elm / ash / cottonwood group
+E,-,705,Sycamore / pecan / American elm,700,Elm / ash / cottonwood group
+E,-,706,Sugarberry / hackberry / elm / green ash,700,Elm / ash / cottonwood group
+E,-,707,Silver maple / American elm,700,Elm / ash / cottonwood group
+E,-,708,Red maple / lowland,700,Elm / ash / cottonwood group
+E,W,709,Cottonwood / willow,700,Elm / ash / cottonwood group
+-,W,722,Oregon ash,700,Elm / ash / cottonwood group
+-,-,800,Maple / beech / birch group,800,Maple / beech / birch group
+E,-,801,Sugar maple / beech / yellow birch,800,Maple / beech / birch group
+E,-,802,Black cherry,800,Maple / beech / birch group
+E,-,805,Hard maple / basswood,800,Maple / beech / birch group
+E,-,809,Red maple / upland,800,Maple / beech / birch group
+-,-,900,Aspen / birch group,900,Aspen / birch group
+E,W,901,Aspen,900,Aspen / birch group
+E,W,902,Paper birch,900,Aspen / birch group
+E,-,903,Gray birch,900,Aspen / birch group
+E,W,904,Balsam poplar,900,Aspen / birch group
+E,W,905,Pin cherry,900,Aspen / birch group
+-,-,910,Alder / maple group,910,Alder / maple group
+-,W,911,Red alder,910,Alder / maple group
+-,W,912,Bigleaf maple,910,Alder / maple group
+-,-,920,Western oak group,920,Western oak group
+-,W,921,Gray pine,920,Western oak group
+-,W,922,California black oak,920,Western oak group
+-,W,923,Oregon white oak,920,Western oak group
+-,W,924,Blue oak,920,Western oak group
+-,W,931,Coast live oak,920,Western oak group
+-,W,933,Canyon live oak,920,Western oak group
+-,W,934,Interior live oak,920,Western oak group
+-,W,935,California white oak (valley oak),920,Western oak group
+-,-,940,Tanoak / laurel group,940,Tanoak / laurel group
+-,W,941,Tanoak,940,Tanoak / laurel group
+-,W,942,California laurel,940,Tanoak / laurel group
+-,W,943,Giant chinkapin,940,Tanoak / laurel group
+-,-,960,Other hardwoods group,960,Other hardwoods group
+-,W,961,Pacific madrone,960,Other hardwoods group
+-,W,962,Other hardwoods,960,Other hardwoods group
+-,-,970,Woodland hardwoods group,970,Woodland hardwoods group
+-,W,971,Deciduous oak woodland,970,Woodland hardwoods group
+-,W,972,Evergreen oak woodland,970,Woodland hardwoods group
+-,W,973,Mesquite woodland,970,Woodland hardwoods group
+-,W,974,Cercocarpus (mountain brush) woodland,970,Woodland hardwoods group
+-,W,975,Intermountain maple woodland,970,Woodland hardwoods group
+-,W,976,Miscellaneous woodland hardwoods,970,Woodland hardwoods group
+-,-,980,Tropical hardwoods group,980,Tropical hardwoods group
+E,-,982,Mangrove,980,Tropical hardwoods group
+E,W,983,Palms,980,Tropical hardwoods group
+-,W,984,Dry forest,980,Tropical hardwoods group
+-,W,985,Moist forest,980,Tropical hardwoods group
+-,W,986,Wet and rain forest,980,Tropical hardwoods group
+-,W,987,Lower montane wet and rain forest,980,Tropical hardwoods group
+-,W,988,Cloud forest,980,Tropical hardwoods group
+-,W,989,Other tropical hardwoods,980,Tropical hardwoods group
+-,-,990,Exotic hardwoods group,990,Exotic hardwoods group
+E,-,991,Paulownia,990,Exotic hardwoods group
+E,-,992,Melaleuca,990,Exotic hardwoods group
+E,W,993,Eucalyptus,990,Exotic hardwoods group
+E,W,995,Other exotic hardwoods,990,Exotic hardwoods group
+-,-,999,Nonstocked,999,Nonstocked
