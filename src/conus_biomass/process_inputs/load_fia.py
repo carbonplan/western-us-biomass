@@ -5,7 +5,7 @@ import pandas as pd
 from conus_biomass.dir_info import dir_fia_csvs
 
 
-def load_fia_table(state: str = "PA", table: str = "TREE") -> pd.DataFrame:
+def load_fia_table(state: str = "PA", table: str = "TREE", usecols=None) -> pd.DataFrame:
     """Load a table from the FIA database for a given state.
     Inputs:
     state (str): State abbreviation
@@ -14,12 +14,12 @@ def load_fia_table(state: str = "PA", table: str = "TREE") -> pd.DataFrame:
     Outputs:
     df (pd.DataFrame): DataFrame containing the table data"""
 
-    fname = os.path.join(dir_fia_csvs, "csv_fiadb_by_state", state,  f"{state}_{table}.csv")
+    fname = os.path.join(dir_fia_csvs, "csv_fiadb_by_state", state, f"{state}_{table}.csv")
     if state == "entire":
         fname = os.path.join(dir_fia_csvs, "csv_fiadb_entire", f"ENTIRE_{table}.csv")
 
     try:
-        df = pd.read_csv(fname, low_memory=False)
+        df = pd.read_csv(fname, low_memory=False, usecols=usecols)
     except FileNotFoundError:
         raise FileNotFoundError(f"{table} table not found for {state}")
 
@@ -127,10 +127,10 @@ def load_data(state: str = "CA") -> list[pd.DataFrame]:
     # pop_plot_stratum_cols = ["PLT_CN", "STRATUM_CN"]
 
     # Load data
-    tree_df = load_fia_table(state=state, table="TREE")[tree_cols]
-    cond_df = load_fia_table(state=state, table="COND")[cond_cols]
-    plot_df = load_fia_table(state=state, table="PLOT")[plot_cols]
-    plotgeom_df = load_fia_table(state=state, table="PLOTGEOM")[plotgeom_cols]
+    tree_df = load_fia_table(state=state, table="TREE", usecols=tree_cols)
+    cond_df = load_fia_table(state=state, table="COND", usecols=cond_cols)
+    plot_df = load_fia_table(state=state, table="PLOT", usecols=plot_cols)
+    plotgeom_df = load_fia_table(state=state, table="PLOTGEOM", usecols=plotgeom_cols)
     # pop_stratum_df = load_fia_table(state=state, table="POP_STRATUM")[pop_stratum_cols]
     # pop_plot_stratum_df = load_fia_table(state=state, table="POP_PLOT_STRATUM_ASSGN")[
     #    pop_plot_stratum_cols
