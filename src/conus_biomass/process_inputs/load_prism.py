@@ -3,14 +3,14 @@ import os
 import numpy as np
 import pandas as pd
 import rasterio
-import xarray as xr
 from rasterio.transform import rowcol
+import xarray as xr
 
 from conus_biomass.dir_info import dir_prism
 
 
 def get_prism_dir(var="tmean"):
-    return dir_prism + "PRISM_" + var + "_stable_4kmM3_198101_202408_bil/"
+    return f"{dir_prism}PRISM_{var}_stable_4kmM3_198101_202408_bil/"
 
 
 def extract_temperature_data(latitudes, longitudes, location_ids, tmean_folder):
