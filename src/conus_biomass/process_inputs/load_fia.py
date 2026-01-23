@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 
 from conus_biomass.dir_info import dir_fia_csvs
@@ -8,24 +10,6 @@ except FileNotFoundError:
     raise FileNotFoundError("REF_SPECIES.csv file not found.")
 
 
-def get_fname(state: str = "PA", table: str = "TREE") -> str:
-    """Get the file name for a given state and table.
-
-    Inputs:
-    state (str): State abbreviation
-    table (str): Table name
-
-    Outputs:
-    fname (str): File name
-    """
-    if state == "entire":
-        fname = dir_fia_csvs + "csv_fiadb_entire/" + "ENTIRE_" + table + ".csv"
-    else:
-        fname = dir_fia_csvs + "csv_fiadb_by_state/" + state + "/" + state + "_" + table + ".csv"
-        # fname = dir_fia_csvs + state + "/" + state + "_" + table + ".csv"
-    return fname
-
-
 def load_fia_table(state: str = "PA", table: str = "TREE") -> pd.DataFrame:
     """Load a table from the FIA database for a given state.
     Inputs:
@@ -34,12 +18,15 @@ def load_fia_table(state: str = "PA", table: str = "TREE") -> pd.DataFrame:
 
     Outputs:
     df (pd.DataFrame): DataFrame containing the table data"""
-    fname = get_fname(state=state, table=table)
+
+    fname = os.path.join(dir_fia_csvs, "csv_fiadb_by_state", state,  f"{state}_{table}.csv")
+    if state == "entire":
+        fname = os.path.join(dir_fia_csvs, "csv_fiadb_entire", f"ENTIRE_{table}.csv")
 
     try:
         df = pd.read_csv(fname, low_memory=False)
     except FileNotFoundError:
-        raise FileNotFoundError(state + "_" + "file not found.")
+        raise FileNotFoundError(f"{table} table not found for {state}")
 
     return df
 
