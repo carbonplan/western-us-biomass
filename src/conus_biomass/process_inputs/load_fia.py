@@ -4,11 +4,6 @@ import pandas as pd
 
 from conus_biomass.dir_info import dir_fia_csvs
 
-try:
-    ref_species_df = pd.read_csv(dir_fia_csvs + "fiadb_reference/REF_SPECIES.csv")
-except FileNotFoundError:
-    raise FileNotFoundError("REF_SPECIES.csv file not found.")
-
 
 def load_fia_table(state: str = "PA", table: str = "TREE") -> pd.DataFrame:
     """Load a table from the FIA database for a given state.
