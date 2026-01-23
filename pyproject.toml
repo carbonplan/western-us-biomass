@@ -126,3 +126,10 @@ pint = ">=0.25.2,<0.26"
 numcodecs = "==0.15.1"
 blosc = "==1.21.6"
 pre-commit = ">=4.5.1,<5"
+
+[tool.pixi.feature.dev.dependencies]
+black = "*"
+pixi-pycharm = "*"
+
+[tool.pixi.environments]
+dev = ["dev"]
