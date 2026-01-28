@@ -851,8 +851,8 @@ def calculate_biomass_deltas(ds: xr.Dataset, biomass_var="biomass") -> xr.Datase
     measyear_1 = biomass["year"].values[second_to_last_index]
     measyear_2 = biomass["year"].values[last_index]
 
-    ds["biomass_delta"] = (("plotid"), biomass_delta)
-    ds["biomass_most_recent"] = (("plotid"), biomass_end.values)
+    ds[biomass_var + "_delta"] = (("plotid"), biomass_delta)
+    ds[biomass_var + "_most_recent"] = (("plotid"), biomass_end.values)
 
     ds["measyear_2"] = (("plotid"), measyear_2)
     ds["measyear_1"] = (("plotid"), measyear_1)
