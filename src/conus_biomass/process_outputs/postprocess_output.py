@@ -5,6 +5,8 @@ import xarray as xr
 
 from conus_biomass import dir_info
 
+logging.basicConfig(level=logging.INFO)
+
 
 def get_fname_processed_biomass(
     year: int,
@@ -20,7 +22,7 @@ def process_model_output(
     dir_model_input: str = dir_info.dir_model_input,
     dir_model_output: str = dir_info.dir_model_output,
     chunk_size: int = 200,
-    year_range: np.array = np.arange(2010, 2023),
+    year_range: np.array = np.arange(2005, 2023),
     varname_file: str = "predicted_biomass",
     varname_array: str = "predicted_biomass",
 ):
