@@ -1,5 +1,6 @@
-# STATE_LIST = ["AZ", "CA", "CO", "ID", "MT", "NM", "NV", "OR", "UT", "WA", "WY"]
+STATE_LIST = ["AZ", "CA", "CO", "ID", "MT", "NM", "NV", "OR", "UT", "WA", "WY"]
 
+"""
 STATE_LIST = [  # "AK",
     "AL",
     "AR",
@@ -51,3 +52,4 @@ STATE_LIST = [  # "AK",
     "WV",
     "WY",
 ]
+"""
