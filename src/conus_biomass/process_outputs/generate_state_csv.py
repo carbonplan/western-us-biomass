@@ -3,11 +3,14 @@ import logging
 import geopandas as gpd
 import numpy as np
 import pandas as pd
+import pyproj
 import xarray as xr
 
 from conus_biomass import dir_info
 from conus_biomass.process_outputs.postprocess_output import get_fname_processed_biomass
 from conus_biomass.settings import STATE_LIST
+
+logging.basicConfig(level=logging.INFO)
 
 SHP = gpd.read_file(dir_info.dir_shp + "cb_2018_us_state_20m.shp")
 
@@ -38,7 +41,12 @@ def get_output_biomass(
     )
 
     da = xr.open_zarr(fname)["predicted_biomass"]
-    da = da.rio.write_crs(crs)
+
+    # Normalize the CRS so GDAL can parse it consistently
+    clean_crs = pyproj.CRS.from_wkt(crs).to_wkt()
+
+    da = da.rio.write_crs(clean_crs)
+
     return da
 
 
@@ -50,7 +58,7 @@ def get_FRF_area(year: int, crs: str, dir_model_input: str = dir_info.dir_model_
     return da
 
 
-def calculate_total_carbon_stock(biomass_forest, grid_res: int = 100):
+def calculate_total_carbon_stock(biomass_forest, grid_res: int = 1000):
     if grid_res == 100:
         gridcell_ha = 1
     elif grid_res == 1000:
@@ -78,6 +86,7 @@ def calculate_state_stocks_from_gridded(
         biomass_forest_state = clip_to_shape(da=biomass_forest, shp=shp_state)
 
         MMT = calculate_total_carbon_stock(biomass_forest_state, grid_res=grid_res)
+        logging.info(MMT)
         biomass_states.append(MMT)
 
     df_year = pd.DataFrame(
