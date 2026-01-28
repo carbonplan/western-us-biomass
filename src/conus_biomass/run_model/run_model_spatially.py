@@ -15,6 +15,8 @@ from conus_biomass.train_models import (
     train_model_init_biomass,
 )
 
+logging.basicConfig(level=logging.INFO)
+
 MODELS = {
     "init": joblib.load(train_model_init_biomass.FPATH_MODEL),
     "unburned": joblib.load(train_model_delta_unburned.FPATH_MODEL),
@@ -471,6 +473,7 @@ def main(
     ytile=None,
     dir_in: str = dir_info.dir_model_input,
     dir_out: str = dir_info.dir_model_output,
+    resolution: int = 1000,
 ):
     def process_tile(tile_ind, inputs_2d, year_range=np.arange(2005, 2023)):
         initialize_biomass(
@@ -486,7 +489,10 @@ def main(
     fpath_2d_zarr = dir_info.dir_model_input + "all_variables_2D.zarr"
     inputs_2d_all = xr.open_zarr(fpath_2d_zarr)
 
-    tile_size = 2000  # this is the appropriate tile size for a 100m resolution run
+    if resolution == 1000:
+        tile_size = 200  # this is the appropriate tile size for a 1000m resolution run
+    elif resolution == 100:
+        tile_size = 2000  # this is the appropriate tile size for a 100m resolution run
 
     x_slice = slice(xtile * tile_size, (xtile + 1) * tile_size)
     y_slice = slice(ytile * tile_size, (ytile + 1) * tile_size)

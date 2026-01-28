@@ -4,7 +4,7 @@
 #SBATCH --output=logs/tile_%A_%a.out
 #SBATCH --error=logs/tile_%A_%a.err
 #SBATCH --time=06:00:00
-#SBATCH --mem=120G
+#SBATCH --mem=30G
 #SBATCH --cpus-per-task=1
 #SBATCH --array=0-385
 
