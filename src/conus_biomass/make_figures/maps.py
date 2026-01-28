@@ -37,9 +37,11 @@ def plot_map(
     clims: list[int] = [0, 30],
     savefig: str = None,
     cbar_location: str = "right",
+    ax=None,
 ):
     plt.rcParams["font.size"] = 16
-    fig, ax = plt.subplots(figsize=(20, 7))
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(20, 7))
 
     if latlon:
         shp_plot = shp.to_crs("EPSG:4326")
