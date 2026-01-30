@@ -2,6 +2,7 @@ import logging
 import time
 
 import numpy as np
+import xarray as xr
 
 from conus_biomass.dir_info import dir_processed
 from conus_biomass.train_models import (
@@ -13,7 +14,7 @@ from conus_biomass.train_models import (
 
 
 def load_data(
-    fpath=dir_processed + "restructured_FIA/" + "*_FIA_plots_and_PRISM_v7.nc", condprop_filter=True
+    fpath=dir_processed + "restructured_FIA/" + "*_FIA_plots_and_PRISM_v8.nc", condprop_filter=True
 ):
     fia_data = train_models_utils.load_data(fpath)
     if condprop_filter:
@@ -32,21 +33,23 @@ def load_data(
 
 
 def split_test_train(fia_data):
-    # Get all unique plotids
-    plotids = fia_data.plotid.values
+
+    plotids = np.unique(fia_data.plotid.values)
 
     # Randomly select 20% for testing
     np.random.seed(42)  # for reproducibility
     test_plotids = np.random.choice(plotids, size=int(0.2 * len(plotids)), replace=False)
 
     # Create boolean masks for selection
-    is_test = np.isin(fia_data.plotid, test_plotids)
-    is_train = ~is_test
-    # train_plotids = np.setdiff1d(plotids, test_plotids)
+    is_test_np = np.isin(fia_data.plotid.values, test_plotids)
+    is_train_np = ~is_test_np
+    # Convert to DataArray masks with correct dimension
+    is_train = xr.DataArray(is_train_np, dims=["plotid"])
 
     # Split the dataset
-    fia_data_test = fia_data.sel(plotid=test_plotids)
-    fia_data_train = fia_data.sel(plotid=plotids[is_train])  # train_plotids)
+
+    fia_data_test = fia_data.where(fia_data["plotid"].isin(test_plotids), drop=True)
+    fia_data_train = fia_data.where(is_train, drop=True)
 
     return fia_data_test, fia_data_train
 
@@ -54,16 +57,8 @@ def split_test_train(fia_data):
 def split_subcomponents(fia_data):
     fia_data_burned = fia_data.where((fia_data["fire_between_measurements"] > 0).load(), drop=True)
 
-    #    fia_data_harvest = fia_data.where(
-    #        (fia_data["harvest_between_measurements"] > 0).load(), drop=True
-    #    )
-
     fia_data_undisturbed = fia_data.where(
-        (
-            fia_data["fire_between_measurements"]
-            == 0
-            # * (fia_data["harvest_between_measurements"] == 0)
-        ).load(),
+        (fia_data["fire_between_measurements"] == 0).load(),
         drop=True,
     )
 

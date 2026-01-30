@@ -4,7 +4,9 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 
+from conus_biomass import dir_info
 from conus_biomass.dir_info import dir_lookups
+from conus_biomass.process_inputs import load_prism
 from conus_biomass.process_inputs.load_fia import load_data
 from conus_biomass.unit_conversion import ACRES_PER_HECTARE, POUNDS_PER_METRIC_TON
 
@@ -851,8 +853,8 @@ def calculate_biomass_deltas(ds: xr.Dataset, biomass_var="biomass") -> xr.Datase
     measyear_1 = biomass["year"].values[second_to_last_index]
     measyear_2 = biomass["year"].values[last_index]
 
-    ds["biomass_delta"] = (("plotid"), biomass_delta)
-    ds["biomass_most_recent"] = (("plotid"), biomass_end.values)
+    ds[biomass_var + "_delta"] = (("plotid"), biomass_delta)
+    ds[biomass_var + "_most_recent"] = (("plotid"), biomass_end.values)
 
     ds["measyear_2"] = (("plotid"), measyear_2)
     ds["measyear_1"] = (("plotid"), measyear_1)
@@ -1088,3 +1090,94 @@ def run_through_restructuring(cond_data_recent: pd.DataFrame) -> xr.Dataset:
     ds = calculate_biomass_deltas(ds)
 
     return ds
+
+
+def get_fname_plot_intermediate(state: str = "CA"):
+    fname = dir_info.dir_processed + state + "_FIA_plots_and_PRISM.nc"
+    return fname
+
+
+def process_single_state(
+    state: str = "CA",
+    fpath_out: str = get_fname_plot_intermediate(state="CA"),
+):
+    cond_data = process_fia_data(state=state)
+    cond_data_recent = filter_cond_data(cond_data)
+    print("Running through restructuring")
+    ds = run_through_restructuring(cond_data_recent)
+    print("Loading PRISM data")
+    prism_ds = load_prism.load_prism_data_for_all_plots(ds)
+    print("Combining datasets")
+    ds_combined = load_prism.combine_two_datasets(ds, prism_ds)
+    if fpath_out is not None:
+        print("Saving dataset")
+        ds_combined.to_netcdf(fpath_out)
+    print(len(ds_combined))
+    return ds_combined
+
+
+def process_all_states(
+    state_list: list, save_files: bool = True, fout_suffix: str = "_FIA_plots_and_PRISM_v12.nc"
+):
+
+    def _add_climatology_stats(ds, ds_clim, var):
+        """Add mean and seasonal min/max climatology for a variable."""
+        ds[f"{var}_clim_mean"] = ds_clim[var].mean(dim="time")
+
+        seasonal_means = ds_clim[var].groupby("time.season").mean(dim="time")
+        ds[f"{var}_clim_minseason"] = seasonal_means.min(dim="season")
+        ds[f"{var}_clim_maxseason"] = seasonal_means.max(dim="season")
+
+        return ds
+
+    def _add_anomalies(ds, var, anom_years=np.arange(1991, 2024)):
+        """Add anomaly fields for a variable across all years."""
+        # Initialize anomaly arrays
+        ds[f"{var}_mean_anom"] = xr.full_like(ds["biomass"], fill_value=np.nan)
+        ds[f"{var}_minseason_anom"] = xr.full_like(ds["biomass"], fill_value=np.nan)
+        ds[f"{var}_maxseason_anom"] = xr.full_like(ds["biomass"], fill_value=np.nan)
+
+        for year in anom_years:
+            ds_10yr = ds.sel(time=ds["time.year"].isin(np.arange(year - 10, year)))
+            year_mask = ds["year"] == year
+
+            # Mean anomaly
+            ds[f"{var}_mean_anom"].loc[:, year_mask] = (
+                ds_10yr[var].mean(dim="time") - ds[f"{var}_clim_mean"]
+            )
+
+            # Seasonal anomalies
+            seasonal_means_10yr = ds_10yr[var].groupby("time.season").mean(dim="time")
+            ds[f"{var}_minseason_anom"].loc[:, year_mask] = (
+                seasonal_means_10yr.min(dim="season") - ds[f"{var}_clim_minseason"]
+            )
+            ds[f"{var}_maxseason_anom"].loc[:, year_mask] = (
+                seasonal_means_10yr.max(dim="season") - ds[f"{var}_clim_maxseason"]
+            )
+
+        return ds
+
+    for i, state in enumerate(state_list):
+        print("--------------------")
+        print("Processing state: " + state)
+        process_single_state(state=state)
+        if save_files:
+            ds_state = process_fia_data(
+                state=state, fpath_out=get_fname_plot_intermediate(state=state)
+            )
+
+        for var in ["tmean", "ppt", "tdmean", "tmax", "tmin", "vpdmax", "vpdmin"]:
+            print(var)
+
+            ds_state_clim = ds_state.sel(time=ds_state["time.year"].isin(np.arange(1981, 2011)))
+
+            ds_state = _add_climatology_stats(ds=ds_state, ds_clim=ds_state_clim, var=var)
+
+            ds_state = _add_anomalies(ds=ds_state, var=var)
+
+        ds_state = ds_state.drop_vars(
+            ["tmean", "ppt", "tdmean", "tmax", "tmin", "vpdmax", "vpdmin"]
+        )
+
+        if save_files:
+            ds_state.to_netcdf(dir_info.dir_processed + "restructured_FIA/" + state + fout_suffix)
