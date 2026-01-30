@@ -77,11 +77,13 @@ def get_gridded_var(var: str, year: int = 2005, dir_in: str = dir_info.dir_model
     return var_output
 
 
-def save_gridded_dataset(ds, fname, suffix=".zarr"):
+def save_gridded_dataset(ds, fname, suffix=".nc"):
 
     ds = ds.chunk({dim: -1 for dim in ds.dims})
-
-    ds.to_zarr(fname + ".zarr", mode="w")
+    if suffix == ".zarr":
+        ds.to_zarr(fname + ".zarr", mode="w")
+    elif suffix == ".nc":
+        ds.to_netcdf(fname + ".nc")
 
 
 def get_var_2d(var: str, year: int = None, inputs_2d=None):
@@ -411,11 +413,11 @@ def calculate_biomass_changes_over_time(
     start_time = time.time()
     if start_year is None:
         predicted_biomass_start = xr.open_zarr(
-            dir_out + "predicted_biomass_unfiltered_init" + tile_ind + ".zarr"
+            dir_out + "predicted_biomass_unfiltered_init" + tile_ind + ".nc"
         )["predicted_biomass"]
     else:
         predicted_biomass_start = xr.open_zarr(
-            dir_out + "predicted_biomass_unfiltered_" + str(start_year) + tile_ind + ".zarr"
+            dir_out + "predicted_biomass_unfiltered_" + str(start_year) + tile_ind + ".nc"
         )["predicted_biomass"]
 
     # ecosection = get_var_2d(var="ecosection", inputs_2d=inputs_2d)
