@@ -17,6 +17,31 @@ from conus_biomass.make_figures import plot_model_evaluation
 logging.basicConfig(level=logging.INFO)
 
 
+def encode_categorical(da, category: str):
+    lookups = pd.read_csv(dir_lookups + "ecosection_lookup.csv")
+
+    if category == "ecosection":
+        lookups_unique = lookups.drop_duplicates(subset="Ecosection")
+        mapping = dict(zip(lookups_unique["Ecosection"], lookups_unique["Ecosection_code"]))
+    elif category == "ecoprovince":
+        lookups_unique = lookups.drop_duplicates(subset="Ecoprovince")
+        mapping = dict(zip(lookups_unique["Ecoprovince"], lookups_unique["Ecoprovince_code"]))
+    else:
+        raise ValueError("category must be 'ecosection' or 'ecoprovince'")
+
+    # Bind mapping in the lambda using a default argument
+    def block_mapper(block):
+        return np.vectorize(lambda x, mapping=mapping: mapping.get(x, -1))(block)
+
+    dask_array = da.data
+
+    mapped = dask_array.map_blocks(block_mapper, dtype=int)
+
+    encoded_xr = xr.DataArray(mapped, coords=da.coords, dims=da.dims, name=f"{category}_code")
+
+    return encoded_xr
+
+
 def get_ecosection_lists():
     ds = pd.read_csv(dir_lookups + "ecosection_lookup.csv")
     ecosection_cats = ds["Ecosection"].unique().tolist()
@@ -137,6 +162,12 @@ def calculate_new_fia_variables(fia_data: xr.Dataset) -> xr.Dataset:
     if "pct_own_public" not in fia_data.data_vars:
         fia_data["pct_own_public"] = fia_data["pct_own_federal"] + fia_data["pct_own_statelocal"]
 
+    if "Ecosection_code" not in fia_data.data_vars:
+        fia_data["Ecosection_code"] = encode_categorical(fia_data["Ecosection"], "ecosection")
+
+    if "Ecoprovince_code" not in fia_data.data_vars:
+        fia_data["Ecoprovince_code"] = encode_categorical(fia_data["Ecoprovince"], "ecoprovince")
+
     return fia_data
 
 
@@ -242,12 +273,16 @@ def filter_out_nans(X: pd.DataFrame, y: pd.Series) -> tuple[pd.DataFrame, pd.Ser
         y_filtered: pandas series containing the filtered output data
     """
 
-    y_filtered = y.dropna()
-    valid_ids = set(y_filtered.index.values)
-    X_filtered = X.loc[X.index.isin(valid_ids)]
-    # X_filtered = X_filtered.dropna()
-    # valid_ids2 = set(X_filtered.index)
-    # y_filtered = y_filtered.loc[y_filtered.index.isin(valid_ids2)]
+    # Combine X and y into one DataFrame
+    df = X.copy()
+    df["_target"] = y
+
+    # Drop any row where either X or y has NaNs
+    df = df.dropna()
+
+    # Split back out into separate X and y
+    y_filtered = df["_target"]
+    X_filtered = df.drop(columns=["_target"])
 
     return X_filtered, y_filtered
 
@@ -456,10 +491,6 @@ def do_shap_analysis(
     logging.info("Creating SHAP explainer")
     explainer = shap.TreeExplainer(model, X_train)
     shap_values = explainer(X_test, check_additivity=False)
-    print(type(X_test))
-    print(type(X_train))
-    print(type(X))
-    print(type(shap_values))
 
     logging.info("Generating model evaluation plots")
     plot_model_evaluation.plot_feature_importance(shap_values, X_test, dir_figures)
