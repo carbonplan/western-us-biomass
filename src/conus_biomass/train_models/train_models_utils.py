@@ -438,7 +438,6 @@ def train_model(
         )
 
         model.fit(X_train, y_train)
-        logging.info("Model training complete")
     elif modeltype == "xgboost":
         model = construct_model(
             modeltype=modeltype,
