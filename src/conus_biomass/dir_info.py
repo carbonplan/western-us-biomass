@@ -1,5 +1,5 @@
-dir_raw_data = "/dfs8/jranders_lab1/users/czarakas/uncertain_land_sink_data/raw_data/"
-dir_processed = "/dfs8/jranders_lab1/users/czarakas/uncertain_land_sink_data/processed_data/"
+dir_raw_data = "/dfs10/jranders_lab1/users/czarakas/uncertain_land_sink_data/raw_data/"
+dir_processed = "/dfs10/jranders_lab1/users/czarakas/uncertain_land_sink_data/processed_data/"
 dir_lookups = "/data/homezvol3/czarakas/conus-biomass/data/"
 
 ################ Raw data inputs ################
@@ -8,7 +8,7 @@ dir_landuse_raw = dir_raw_data + "LCMS_Landuse/"
 dir_prism = dir_raw_data + "PRISM/"
 dir_canopy_cover = dir_raw_data + "NLCD_Tree_Canopy_Cover/"
 
-dir_ecosubsections = dir_raw_data + "USFS_ecosubsections/data/commondata/sections2007"
+dir_ecosubsections = dir_raw_data + "USFS_ecosubsections/data/commondata/sections2007/"
 dir_fia_csvs = dir_raw_data + "fiadb/"
 dir_shp = dir_raw_data + "Geographic boundary shapefiles/cb_2018_us_state_20m/"
 dir_shp_states = dir_raw_data + "Geographic boundary shapefiles/"
