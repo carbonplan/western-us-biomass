@@ -57,16 +57,8 @@ def split_test_train(fia_data):
 def split_subcomponents(fia_data):
     fia_data_burned = fia_data.where((fia_data["fire_between_measurements"] > 0).load(), drop=True)
 
-    #    fia_data_harvest = fia_data.where(
-    #        (fia_data["harvest_between_measurements"] > 0).load(), drop=True
-    #    )
-
     fia_data_undisturbed = fia_data.where(
-        (
-            fia_data["fire_between_measurements"]
-            == 0
-            # * (fia_data["harvest_between_measurements"] == 0)
-        ).load(),
+        (fia_data["fire_between_measurements"] == 0).load(),
         drop=True,
     )
 
