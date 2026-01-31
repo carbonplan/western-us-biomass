@@ -446,7 +446,7 @@ def main(
             tile_ind=tile_ind,
         )
 
-    fpath_2d = dir_info.dir_model_input + "all_variables_2D.nc"
+    fpath_2d = dir_info.dir_model_input + "all_variables.nc"
 
     if resolution == 1000:
         tile_size = 200  # this is the appropriate tile size for a 1000m resolution run
