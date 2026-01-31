@@ -39,7 +39,6 @@ def select_model_and_predictors(disturbance: str, backwards: bool = False):
 
 
 def save_gridded_dataset(ds, fname, suffix=".nc"):
-
     ds = ds.chunk({dim: -1 for dim in ds.dims})
     if suffix == ".zarr":
         ds.to_zarr(fname + ".zarr", mode="w")
@@ -449,8 +448,8 @@ def main(
             tile_ind=tile_ind,
         )
 
-    fpath_2d_zarr = dir_info.dir_model_input + "all_variables_2D.zarr"
-    inputs_2d_all = xr.open_zarr(fpath_2d_zarr)
+    fpath_2d = dir_info.dir_model_input + "all_variables_2D.nc"
+    inputs_2d_all = xr.open_dataset(fpath_2d)
 
     if resolution == 1000:
         tile_size = 200  # this is the appropriate tile size for a 1000m resolution run
