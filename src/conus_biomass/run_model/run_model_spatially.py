@@ -447,12 +447,13 @@ def main(
         )
 
     fpath_2d = dir_info.dir_model_input + "all_variables_2D.nc"
-    inputs_2d_all = xr.open_dataset(fpath_2d)
 
     if resolution == 1000:
         tile_size = 200  # this is the appropriate tile size for a 1000m resolution run
     elif resolution == 100:
         tile_size = 2000  # this is the appropriate tile size for a 100m resolution run
+
+    inputs_2d_all = xr.open_dataset(fpath_2d, chunks={"x": tile_size, "y": tile_size})
 
     x_slice = slice(xtile * tile_size, (xtile + 1) * tile_size)
     y_slice = slice(ytile * tile_size, (ytile + 1) * tile_size)
