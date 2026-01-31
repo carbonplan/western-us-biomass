@@ -40,7 +40,7 @@ def get_output_biomass(
         dir_processed_model_output=dir_processed_model_output, year=year
     )
 
-    da = xr.open_zarr(fname)["predicted_biomass"]
+    da = xr.open_dataset(fname)["predicted_biomass"]
 
     # Normalize the CRS so GDAL can parse it consistently
     clean_crs = pyproj.CRS.from_wkt(crs).to_wkt()
@@ -51,7 +51,7 @@ def get_output_biomass(
 
 
 def get_FRF_area(year: int, crs: str, dir_model_input: str = dir_info.dir_model_input):
-    da = xr.open_dataset(dir_model_input + "all_variables_2D.zarr")["forest_remaining_forest"].sel(
+    da = xr.open_dataset(dir_model_input + "all_variables.nc")["forest_remaining_forest"].sel(
         year=year
     )
     da = da.rio.write_crs(crs)
