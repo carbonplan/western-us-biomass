@@ -70,7 +70,6 @@ def get_var_2d(var: str, year: int = None, inputs_2d=None):
 
 
 def prepare_input_data(
-    fpath_prism: str = dir_info.dir_model_input + "prism_CONUS_clim_all_on_ref_grid.zarr",
     fpath_predictor_list: str = PREDICTORS["unburned"],
     fia_plot_data=None,
     inputs_2d=None,
@@ -338,7 +337,6 @@ def initialize_biomass(
     years_since_fire_initial = get_var_2d(var="years_after_fire", year=year, inputs_2d=inputs_2d)
 
     [df_inputs, original_shape_x, original_shape_y] = prepare_input_data(
-        fpath_prism=dir_in + "prism_CONUS_clim_all_on_ref_grid.zarr",
         fpath_predictor_list=PREDICTORS["init"],
         years_after_fire=years_since_fire_initial,
         canopy_cover=get_var_2d(var="LIVE_CANOPY_CVR_PCT", year=year, inputs_2d=inputs_2d),
