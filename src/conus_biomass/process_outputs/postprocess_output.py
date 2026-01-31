@@ -13,7 +13,7 @@ def get_fname_processed_biomass(
     dir_processed_model_output: str = dir_info.dir_model_output[:-1] + "_processed/",
     varname: str = "predicted_biomass",
 ):
-    fname = dir_processed_model_output + varname + "_filtered_" + str(year) + ".zarr"
+    fname = dir_processed_model_output + varname + "_filtered_" + str(year) + ".nc"
     return fname
 
 
@@ -40,13 +40,12 @@ def process_model_output(
 
         return frf_mask / 100
 
-    inputs_zarr = dir_model_input + "all_variables_2D.zarr"
-    inputs = xr.open_zarr(inputs_zarr)
+    inputs_fname = dir_model_input + "all_variables.nc"
+    inputs = xr.open_dataset(inputs_fname)
 
     for year in year_range:
         ds = xr.open_mfdataset(
-            dir_model_output + varname_file + "_unfiltered_" + str(year) + "_*_.zarr",
-            consolidated=False,
+            dir_model_output + varname_file + "_unfiltered_" + str(year) + "_*_.nc",
             join="outer",
         )
 
@@ -68,7 +67,7 @@ def process_model_output(
             varname="predicted_biomass",
         )
         logging.info(fname_out)
-        ds_filtered.to_dataset(name=varname_array).to_zarr(fname_out, mode="w")
+        ds_filtered.to_dataset(name=varname_array).to_netcdf(fname_out, mode="w")
 
 
 def main():
