@@ -38,50 +38,12 @@ def select_model_and_predictors(disturbance: str, backwards: bool = False):
     return MODELS[key], PREDICTORS[key]
 
 
-def get_fname_years_since_fire(
-    year: int,
-    dir_in: str = dir_info.dir_model_input + "/years_post_disturbance/",
-) -> str:
-    """
-    Gets the filename for years since fire in a given year
-    """
-    fname = dir_in + "years_post_disturbance_" + str(year) + ".zarr"
-    return fname
-
-
-def get_gridded_var(var: str, year: int = 2005, dir_in: str = dir_info.dir_model_input):
-    """
-    Gets the gridded dataset (on consistent grid to other variables) for a given variable and year
-    """
-
-    var_paths = {
-        "tcc": ("TREE_CANOPY_COVER/NLCD_TCC_{year}.zarr", "LIVE_CANOPY_CVR_PCT"),
-        "ecosection": ("ecosection.zarr", "ecosection"),
-        "ecoprovince": ("ecoprovince.zarr", "ecoprovince"),
-        "pct_own_public": ("pct_public_ownership.zarr", "PCT_PUBLIC"),
-        "slope": ("slope_pct_rise.zarr", "slope_pct_rise"),
-        "elevation": ("elevation.zarr", "elevation"),
-        "aspect": ("aspect.zarr", "aspect"),
-        "STDAGE": ("STDAGE.zarr", "__xarray_dataarray_variable__"),
-    }
-
-    if var in var_paths:
-        path, key = var_paths[var]
-        path = path.format(year=year)
-        var_output = xr.open_zarr(dir_in + path)[key]
-        if key == "__xarray_dataarray_variable__":
-            var_output = var_output
-    else:
-        var_output = xr.open_zarr(dir_in + var + ".zarr")[var]
-
-    return var_output
-
-
-def save_gridded_dataset(ds, fname, suffix=".zarr"):
-
+def save_gridded_dataset(ds, fname, suffix=".nc"):
     ds = ds.chunk({dim: -1 for dim in ds.dims})
-
-    ds.to_zarr(fname + ".zarr", mode="w")
+    if suffix == ".zarr":
+        ds.to_zarr(fname + ".zarr", mode="w")
+    elif suffix == ".nc":
+        ds.to_netcdf(fname + ".nc")
 
 
 def get_var_2d(var: str, year: int = None, inputs_2d=None):
@@ -108,7 +70,6 @@ def get_var_2d(var: str, year: int = None, inputs_2d=None):
 
 
 def prepare_input_data(
-    fpath_prism: str = dir_info.dir_model_input + "prism_CONUS_clim_all_on_ref_grid.zarr",
     fpath_predictor_list: str = PREDICTORS["unburned"],
     fia_plot_data=None,
     inputs_2d=None,
@@ -376,7 +337,6 @@ def initialize_biomass(
     years_since_fire_initial = get_var_2d(var="years_after_fire", year=year, inputs_2d=inputs_2d)
 
     [df_inputs, original_shape_x, original_shape_y] = prepare_input_data(
-        fpath_prism=dir_in + "prism_CONUS_clim_all_on_ref_grid.zarr",
         fpath_predictor_list=PREDICTORS["init"],
         years_after_fire=years_since_fire_initial,
         canopy_cover=get_var_2d(var="LIVE_CANOPY_CVR_PCT", year=year, inputs_2d=inputs_2d),
@@ -410,12 +370,12 @@ def calculate_biomass_changes_over_time(
     """ """
     start_time = time.time()
     if start_year is None:
-        predicted_biomass_start = xr.open_zarr(
-            dir_out + "predicted_biomass_unfiltered_init" + tile_ind + ".zarr"
+        predicted_biomass_start = xr.open_dataset(
+            dir_out + "predicted_biomass_unfiltered_init" + tile_ind + ".nc"
         )["predicted_biomass"]
     else:
-        predicted_biomass_start = xr.open_zarr(
-            dir_out + "predicted_biomass_unfiltered_" + str(start_year) + tile_ind + ".zarr"
+        predicted_biomass_start = xr.open_dataset(
+            dir_out + "predicted_biomass_unfiltered_" + str(start_year) + tile_ind + ".nc"
         )["predicted_biomass"]
 
     # ecosection = get_var_2d(var="ecosection", inputs_2d=inputs_2d)
@@ -486,13 +446,14 @@ def main(
             tile_ind=tile_ind,
         )
 
-    fpath_2d_zarr = dir_info.dir_model_input + "all_variables_2D.zarr"
-    inputs_2d_all = xr.open_zarr(fpath_2d_zarr)
+    fpath_2d = dir_info.dir_model_input + "all_variables.nc"
 
     if resolution == 1000:
         tile_size = 200  # this is the appropriate tile size for a 1000m resolution run
     elif resolution == 100:
         tile_size = 2000  # this is the appropriate tile size for a 100m resolution run
+
+    inputs_2d_all = xr.open_dataset(fpath_2d, chunks={"x": tile_size, "y": tile_size})
 
     x_slice = slice(xtile * tile_size, (xtile + 1) * tile_size)
     y_slice = slice(ytile * tile_size, (ytile + 1) * tile_size)

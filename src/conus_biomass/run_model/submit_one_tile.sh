@@ -4,7 +4,7 @@
 #SBATCH --output=logs/tile1_%A_%a.out
 #SBATCH --error=logs/tile1_%A_%a.err
 #SBATCH --time=06:00:00
-#SBATCH --mem=120G
+#SBATCH --mem=20G
 #SBATCH --cpus-per-task=1
 
 #source /opt/apps/anaconda/2024.06/etc/profile.d/conda.sh
