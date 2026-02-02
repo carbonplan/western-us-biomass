@@ -32,12 +32,14 @@ def load_data(
     return fia_data
 
 
-def split_test_train(fia_data):
+def split_test_train(fia_data, random_seed: int = 42):
 
     plotids = np.unique(fia_data.plotid.values)
 
     # Randomly select 20% for testing
-    np.random.seed(42)  # for reproducibility
+    if random_seed is not None:
+        # option to set random seed for reproducibility
+        np.random.seed(random_seed)
     test_plotids = np.random.choice(plotids, size=int(0.2 * len(plotids)), replace=False)
 
     # Create boolean masks for selection
@@ -47,7 +49,6 @@ def split_test_train(fia_data):
     is_train = xr.DataArray(is_train_np, dims=["plotid"])
 
     # Split the dataset
-
     fia_data_test = fia_data.where(fia_data["plotid"].isin(test_plotids), drop=True)
     fia_data_train = fia_data.where(is_train, drop=True)
 
@@ -65,7 +66,7 @@ def split_subcomponents(fia_data):
     return fia_data_burned, fia_data_undisturbed
 
 
-def main():
+def main(model_suffix="", random_seed: int = 42):
     start_time = time.time()
 
     logging.info("Loading data")
@@ -77,7 +78,7 @@ def main():
     )
 
     logging.info("Splitting testing and training data")
-    fia_data_test, fia_data_train = split_test_train(fia_data)
+    fia_data_test, fia_data_train = split_test_train(fia_data, random_seed=random_seed)
 
     fia_data_train_burned, fia_data_train_undisturbed = split_subcomponents(fia_data_train)
 
@@ -96,7 +97,7 @@ def main():
         predictors_meas1=train_model_init_biomass.PREDICTOR_VARIABLES_MEAS1,
         predictors_meas2=train_model_init_biomass.PREDICTOR_VARIABLES_MEAS2,
         output_variable=train_model_init_biomass.OUTPUT_VARIABLE,
-        path_model=train_model_init_biomass.FPATH_MODEL,
+        path_model=train_model_init_biomass.FPATH_MODEL + model_suffix,
         path_input_variable_names=train_model_init_biomass.FPATH_PREDICTORS,
         fia_data_train=fia_data_train,
         fia_data_test=fia_data_test,
@@ -112,7 +113,7 @@ def main():
         predictors_meas1=train_model_delta_burned.PREDICTOR_VARIABLES_MEAS1,
         predictors_meas2=train_model_delta_burned.PREDICTOR_VARIABLES_MEAS2,
         output_variable=train_model_delta_burned.OUTPUT_VARIABLE,
-        path_model=train_model_delta_burned.FPATH_MODEL,
+        path_model=train_model_delta_burned.FPATH_MODEL + model_suffix,
         path_input_variable_names=train_model_delta_burned.FPATH_PREDICTORS,
         fia_data_train=fia_data_train_burned,
         fia_data_test=fia_data_test_burned,
@@ -129,7 +130,7 @@ def main():
         predictors_meas1=train_model_delta_unburned.PREDICTOR_VARIABLES_MEAS1,
         predictors_meas2=train_model_delta_unburned.PREDICTOR_VARIABLES_MEAS2,
         output_variable=train_model_delta_unburned.OUTPUT_VARIABLE,
-        path_model=train_model_delta_unburned.FPATH_MODEL,
+        path_model=train_model_delta_unburned.FPATH_MODEL + model_suffix,
         path_input_variable_names=train_model_delta_unburned.FPATH_PREDICTORS,
         fia_data_train=fia_data_train_undisturbed,
         fia_data_test=fia_data_test_undisturbed,
