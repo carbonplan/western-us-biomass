@@ -50,6 +50,6 @@ PREDICTOR_VARIABLES_MEAS2 = []
 
 OUTPUT_VARIABLE = "biomass_start"  # "biomass_end"
 
-FPATH_MODEL = dir_processed + "models/absolute_biomass_random_forest_model.pkl"
+FPATH_MODEL = dir_processed + "models/absolute_biomass_random_forest_model"
 
 FPATH_PREDICTORS = dir_processed + "models/absolute_biomass_random_forest_model_variable_names.csv"
