@@ -24,13 +24,13 @@ PREDICTORS = {
 }
 
 
-def initialize_models(suffix=""):
-    """Initialize models with an optional suffix (e.g., '_0001', '_0002')"""
+def initialize_models(model_suffix=""):
+    """Initialize models with an optional model_suffix (e.g., '_0001', '_0002')"""
 
     models = {
-        "init": joblib.load(train_model_init_biomass.FPATH_MODEL + suffix + ".pkl"),
-        "unburned": joblib.load(train_model_delta_unburned.FPATH_MODEL + suffix + ".pkl"),
-        "burned": joblib.load(train_model_delta_burned.FPATH_MODEL + suffix + ".pkl"),
+        "init": joblib.load(train_model_init_biomass.FPATH_MODEL + model_suffix + ".pkl"),
+        "unburned": joblib.load(train_model_delta_unburned.FPATH_MODEL + model_suffix + ".pkl"),
+        "burned": joblib.load(train_model_delta_burned.FPATH_MODEL + model_suffix + ".pkl"),
     }
 
     for k in models:
@@ -46,11 +46,11 @@ def select_model_and_predictors(disturbance: str, backwards: bool = False, model
     return models[key], PREDICTORS[key]
 
 
-def save_gridded_dataset(ds, fname, suffix=".nc"):
+def save_gridded_dataset(ds, fname, fextension=".nc"):
     ds = ds.chunk({dim: -1 for dim in ds.dims})
-    if suffix == ".zarr":
+    if fextension == ".zarr":
         ds.to_zarr(fname + ".zarr", mode="w")
-    elif suffix == ".nc":
+    elif fextension == ".nc":
         ds.to_netcdf(fname + ".nc")
 
 
@@ -122,7 +122,6 @@ def prepare_input_data(
     df_inputs_consistent = df_inputs
 
     df_inputs_consistent = df_inputs.stack(flat=["x", "y"]).unify_chunks()
-    # df_inputs_consistent = df_inputs_consistent.where(df_inputs_consistent["analysis_mask"].compute(), drop=True)
     df_inputs_consistent = df_inputs_consistent.drop_vars("analysis_mask")
     df_inputs_consistent = df_inputs_consistent.to_dask_dataframe()
     all_data_spatial = df_inputs_consistent[["flat", "band", "x", "y"]]  # "spatial_ref",
@@ -164,9 +163,7 @@ def predict_biomass(
         predicted_biomass_flat = predicted_biomass_flat.squeeze()
 
     else:
-        # nan_mask = df_inputs[df_inputs.columns[0]].isna()
         predicted_biomass_flat = model.predict(df_inputs)
-        # predicted_biomass_flat = np.where(nan_mask, np.nan, predicted_biomass_flat)
 
     x_flat = x_dask_array.compute()
     y_flat = y_dask_array.compute()
@@ -284,11 +281,7 @@ def calculate_delta_biomass(
     predicted_biomass_delta_burned = fire_frac * predicted_biomass_delta_burned
     predicted_biomass_delta_undisturbed = undisturbed_frac * predicted_biomass_delta_unburned
 
-    predicted_biomass_delta = (
-        predicted_biomass_delta_burned
-        # + predicted_biomass_delta_harvested
-        + predicted_biomass_delta_undisturbed
-    )
+    predicted_biomass_delta = predicted_biomass_delta_burned + predicted_biomass_delta_undisturbed
 
     return predicted_biomass_delta
 
@@ -470,7 +463,7 @@ def main(
             tile_ind=tile_ind,
         )
 
-    models = initialize_models(suffix=model_suffix)
+    models = initialize_models(model_suffix=model_suffix)
 
     fpath_2d = dir_info.dir_model_input + "all_variables.nc"
 
