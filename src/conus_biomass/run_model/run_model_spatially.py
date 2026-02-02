@@ -17,15 +17,6 @@ from conus_biomass.train_models import (
 
 logging.basicConfig(level=logging.INFO)
 
-MODELS = {
-    "init": joblib.load(train_model_init_biomass.FPATH_MODEL),
-    "unburned": joblib.load(train_model_delta_unburned.FPATH_MODEL),
-    "burned": joblib.load(train_model_delta_burned.FPATH_MODEL),
-}
-
-for k in MODELS:
-    MODELS[k].n_jobs = 1
-
 PREDICTORS = {
     "init": train_model_init_biomass.FPATH_PREDICTORS,
     "unburned": train_model_delta_unburned.FPATH_PREDICTORS,
@@ -33,9 +24,26 @@ PREDICTORS = {
 }
 
 
-def select_model_and_predictors(disturbance: str, backwards: bool = False):
+def initialize_models(suffix=""):
+    """Initialize models with an optional suffix (e.g., '_0001', '_0002')"""
+
+    models = {
+        "init": joblib.load(train_model_init_biomass.FPATH_MODEL + suffix + ".pkl"),
+        "unburned": joblib.load(train_model_delta_unburned.FPATH_MODEL + suffix + ".pkl"),
+        "burned": joblib.load(train_model_delta_burned.FPATH_MODEL + suffix + ".pkl"),
+    }
+
+    for k in models:
+        models[k].n_jobs = 1
+
+    return models
+
+
+def select_model_and_predictors(disturbance: str, backwards: bool = False, models=None):
+    if models is None:
+        raise ValueError("models dict must be provided")
     key = disturbance + ("_backwards" if backwards else "")
-    return MODELS[key], PREDICTORS[key]
+    return models[key], PREDICTORS[key]
 
 
 def save_gridded_dataset(ds, fname, suffix=".nc"):
@@ -185,16 +193,20 @@ def calculate_delta_biomass(
     years_since_fire=None,
     fpath_predictor_list_unburned=PREDICTORS["unburned"],
     fpath_predictor_list_burned=PREDICTORS["burned"],
-    # fpath_predictor_list_harvest=PREDICTORS["harvest"],
-    model_unburned=MODELS["unburned"],
-    model_burned=MODELS["burned"],
-    # model_harvest=MODELS["harvest"],
+    models=None,
     fia_plot_data=None,
     save_components=False,
     inputs_2d=None,
     tile_ind="",
     **kwargs,
 ):
+
+    if models is None:
+        raise ValueError("models dict must be provided")
+
+    model_unburned = models["unburned"]
+    model_burned = models["burned"]
+
     """Calculate the change in biomass over time."""
     if years_since_fire is None:
         years_since_fire = get_var_2d(var="years_after_fire", year=year, inputs_2d=inputs_2d)
@@ -287,6 +299,7 @@ def increment_time_step(
     delta_live_canopy_cvr,
     delta_live_canopy_cvr_twoyear,
     backwards: bool = False,  # True if running backwards, False if running forwards
+    models=None,
     inputs_2d=None,
     tile_ind="",
     **kwargs,
@@ -296,19 +309,20 @@ def increment_time_step(
     Returns:
         np.ndarray: Biomass at the next time step.
     """
+
     model_unburned, fpath_predictor_list_unburned = select_model_and_predictors(
-        disturbance="unburned", backwards=backwards
+        disturbance="unburned", backwards=backwards, models=models
     )
     model_burned, fpath_predictor_list_burned = select_model_and_predictors(
-        disturbance="burned", backwards=backwards
+        disturbance="burned", backwards=backwards, models=models
     )
+
     predicted_biomass_delta = calculate_delta_biomass(
         predicted_biomass_start=biomass_t_minus_1,
         delta_live_canopy_cvr=delta_live_canopy_cvr,
         delta_live_canopy_cvr_twoyear=delta_live_canopy_cvr_twoyear,
         year=year,
-        model_unburned=model_unburned,
-        model_burned=model_burned,
+        models=models,
         fpath_predictor_list_unburned=fpath_predictor_list_unburned,
         fpath_predictor_list_burned=fpath_predictor_list_burned,
         inputs_2d=inputs_2d,
@@ -330,6 +344,7 @@ def initialize_biomass(
     dir_in: str = dir_info.dir_model_input,
     dir_out: str = dir_info.dir_model_output,
     year: int = 2005,
+    models=None,
     inputs_2d=None,
     tile_ind="",
 ):
@@ -345,7 +360,7 @@ def initialize_biomass(
 
     predicted_biomass_start = predict_biomass(
         df_inputs=df_inputs,
-        model=MODELS["init"],
+        model=models["init"],
         x_dask_array=original_shape_x,
         y_dask_array=original_shape_y,
         inputs_2d=inputs_2d,
@@ -364,6 +379,7 @@ def calculate_biomass_changes_over_time(
     start_year: int = None,
     year_range=np.arange(2005, 2025),  # np.arange(1996, 1989, -1)
     backwards=False,
+    models=None,
     inputs_2d=None,
     tile_ind="",
 ):
@@ -411,6 +427,7 @@ def calculate_biomass_changes_over_time(
             biomass_t_minus_1=biomass_t,
             backwards=backwards,
             year=year,
+            models=models,
             inputs_2d=inputs_2d,
             canopy_cover=canopy_cover,
             delta_live_canopy_cvr=delta_live_canopy_cvr_pct_per_year,
@@ -434,17 +451,26 @@ def main(
     dir_in: str = dir_info.dir_model_input,
     dir_out: str = dir_info.dir_model_output,
     resolution: int = 1000,
+    model_suffix: str = "",
 ):
     def process_tile(tile_ind, inputs_2d, year_range=np.arange(2005, 2023)):
         initialize_biomass(
-            dir_in=dir_in, dir_out=dir_out, inputs_2d=inputs_2d, tile_ind=tile_ind, year=2005
+            dir_in=dir_in,
+            dir_out=dir_out,
+            models=models,
+            inputs_2d=inputs_2d,
+            tile_ind=tile_ind,
+            year=2005,
         )
         calculate_biomass_changes_over_time(
             dir_out=dir_out,
+            models=models,
             inputs_2d=inputs_2d,
             year_range=year_range,
             tile_ind=tile_ind,
         )
+
+    models = initialize_models(suffix=model_suffix)
 
     fpath_2d = dir_info.dir_model_input + "all_variables.nc"
 
@@ -470,6 +496,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--xtile", type=int, required=True)
     parser.add_argument("--ytile", type=int, required=True)
+    parser.add_argument(
+        "--model-suffix", type=str, default="", help="Suffix for model files (e.g., '0001', '0002')"
+    )
     args = parser.parse_args()
 
-    main(xtile=args.xtile, ytile=args.ytile)
+    main(xtile=args.xtile, ytile=args.ytile, model_suffix=args.model_suffix)
