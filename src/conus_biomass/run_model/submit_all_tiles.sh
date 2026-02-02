@@ -6,12 +6,12 @@
 #SBATCH --time=06:00:00
 #SBATCH --mem=30G
 #SBATCH --cpus-per-task=1
-#SBATCH --array=0-256
+#SBATCH --array=0-165
 
 # Ensure Pixi is on PATH (adjust if installed elsewhere)
 export PATH="$HOME/.pixi/bin:$PATH"
 
-nx=16
+nx=10
 ny=15
 
 xtile=$(( SLURM_ARRAY_TASK_ID / ny ))

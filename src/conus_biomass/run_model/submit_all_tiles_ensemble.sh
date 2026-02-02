@@ -20,11 +20,11 @@ for i in $(seq -f "%04g" $START $END); do
 #SBATCH --time=06:00:00
 #SBATCH --mem=30G
 #SBATCH --cpus-per-task=1
-#SBATCH --array=0-256
+#SBATCH --array=0-165
 
 export PATH="\$HOME/.pixi/bin:\$PATH"
 
-nx=16
+nx=10
 ny=15
 xtile=\$(( SLURM_ARRAY_TASK_ID / ny ))
 ytile=\$(( SLURM_ARRAY_TASK_ID % ny ))
