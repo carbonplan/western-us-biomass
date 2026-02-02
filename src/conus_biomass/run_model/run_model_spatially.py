@@ -195,6 +195,7 @@ def calculate_delta_biomass(
     save_components=False,
     inputs_2d=None,
     tile_ind="",
+    model_suffix="",
     **kwargs,
 ):
 
@@ -260,6 +261,7 @@ def calculate_delta_biomass(
             fname=dir_info.dir_model_output
             + "unburned_predicted_biomass_unfiltered_"
             + str(year)
+            + model_suffix
             + tile_ind,
         )
 
@@ -270,12 +272,17 @@ def calculate_delta_biomass(
             fname=dir_info.dir_model_output
             + "burned_predicted_biomass_unfiltered_"
             + str(year)
+            + model_suffix
             + tile_ind,
         )
 
         save_gridded_dataset(
             ds=years_since_fire.to_dataset(name="years_since_fire"),
-            fname=dir_info.dir_model_output + "years_since_fire" + str(year) + tile_ind,
+            fname=dir_info.dir_model_output
+            + "years_since_fire"
+            + str(year)
+            + model_suffix
+            + tile_ind,
         )
 
     predicted_biomass_delta_burned = fire_frac * predicted_biomass_delta_burned
@@ -295,6 +302,7 @@ def increment_time_step(
     models=None,
     inputs_2d=None,
     tile_ind="",
+    model_suffix="",
     **kwargs,
 ):
     """Increment the biomass for the next time step when running forward (e.g. 2005 to 2006)
@@ -320,6 +328,7 @@ def increment_time_step(
         fpath_predictor_list_burned=fpath_predictor_list_burned,
         inputs_2d=inputs_2d,
         tile_ind=tile_ind,
+        model_suffix=model_suffix,
         **kwargs,
     )
 
@@ -340,6 +349,7 @@ def initialize_biomass(
     models=None,
     inputs_2d=None,
     tile_ind="",
+    model_suffix="",
 ):
     """ """
     years_since_fire_initial = get_var_2d(var="years_after_fire", year=year, inputs_2d=inputs_2d)
@@ -361,7 +371,7 @@ def initialize_biomass(
 
     save_gridded_dataset(
         ds=predicted_biomass_start.to_dataset(name="predicted_biomass"),
-        fname=dir_out + "predicted_biomass_unfiltered_" + "init" + tile_ind,
+        fname=dir_out + "predicted_biomass_unfiltered_" + "init" + model_suffix + tile_ind,
     )
 
     return predicted_biomass_start
@@ -375,16 +385,22 @@ def calculate_biomass_changes_over_time(
     models=None,
     inputs_2d=None,
     tile_ind="",
+    model_suffix="",
 ):
     """ """
     start_time = time.time()
     if start_year is None:
         predicted_biomass_start = xr.open_dataset(
-            dir_out + "predicted_biomass_unfiltered_init" + tile_ind + ".nc"
+            dir_out + "predicted_biomass_unfiltered_init" + model_suffix + tile_ind + ".nc"
         )["predicted_biomass"]
     else:
         predicted_biomass_start = xr.open_dataset(
-            dir_out + "predicted_biomass_unfiltered_" + str(start_year) + tile_ind + ".nc"
+            dir_out
+            + "predicted_biomass_unfiltered_"
+            + str(start_year)
+            + model_suffix
+            + tile_ind
+            + ".nc"
         )["predicted_biomass"]
 
     # ecosection = get_var_2d(var="ecosection", inputs_2d=inputs_2d)
@@ -398,7 +414,7 @@ def calculate_biomass_changes_over_time(
     for i, year in enumerate(year_range):
         save_gridded_dataset(
             ds=biomass_t.to_dataset(name="predicted_biomass"),
-            fname=dir_out + "predicted_biomass_unfiltered_" + str(year) + tile_ind,
+            fname=dir_out + "predicted_biomass_unfiltered_" + str(year) + model_suffix + tile_ind,
         )
         logging.info(year)
 
@@ -432,6 +448,7 @@ def calculate_biomass_changes_over_time(
             elevation=elevation,
             pct_own_public=pct_own_public,
             tile_ind=tile_ind,
+            model_suffix=model_suffix,
         )
 
         end_time = time.time()
@@ -446,13 +463,16 @@ def main(
     resolution: int = 1000,
     model_suffix: str = "",
 ):
-    def process_tile(tile_ind, inputs_2d, year_range=np.arange(2005, 2023)):
+    def process_tile(
+        tile_ind, inputs_2d, year_range=np.arange(2005, 2023), model_suffix=model_suffix
+    ):
         initialize_biomass(
             dir_in=dir_in,
             dir_out=dir_out,
             models=models,
             inputs_2d=inputs_2d,
             tile_ind=tile_ind,
+            model_suffix=model_suffix,
             year=2005,
         )
         calculate_biomass_changes_over_time(
@@ -461,6 +481,7 @@ def main(
             inputs_2d=inputs_2d,
             year_range=year_range,
             tile_ind=tile_ind,
+            model_suffix=model_suffix,
         )
 
     models = initialize_models(model_suffix=model_suffix)
@@ -482,7 +503,7 @@ def main(
     logging.info(f"Processing tile {tile_ind}")
 
     if inputs_2d["analysis_mask"].max() > 0:
-        process_tile(tile_ind=tile_ind, inputs_2d=inputs_2d)
+        process_tile(tile_ind=tile_ind, model_suffix=model_suffix, inputs_2d=inputs_2d)
 
 
 if __name__ == "__main__":
