@@ -12,4 +12,4 @@
 #python src/conus_biomass/run_model/run_model_spatially.py --xtile 11 --ytile 2
 
 export PATH="$HOME/.pixi/bin:$PATH"
-pixi run python src/conus_biomass/run_model/run_model_spatially.py --xtile 11 --ytile 2 --model-suffix 0000
+pixi run python src/conus_biomass/run_model/run_model_spatially.py --xtile 11 --ytile 2 --model-suffix "_0000"
