@@ -12,8 +12,9 @@ def get_fname_processed_biomass(
     year: int,
     dir_processed_model_output: str = dir_info.dir_model_output[:-1] + "_processed/",
     varname: str = "predicted_biomass",
+    model_suffix: str = "",
 ):
-    fname = dir_processed_model_output + varname + "_filtered_" + str(year) + ".nc"
+    fname = dir_processed_model_output + varname + "_filtered_" + str(year) + model_suffix + ".nc"
     return fname
 
 
@@ -25,6 +26,7 @@ def process_model_output(
     year_range: np.array = np.arange(2005, 2023),
     varname_file: str = "predicted_biomass",
     varname_array: str = "predicted_biomass",
+    model_suffix: str = "",
 ):
     logging.info("Model input: " + dir_model_input)
     logging.info("Model output: " + dir_model_output)
@@ -45,7 +47,7 @@ def process_model_output(
 
     for year in year_range:
         ds = xr.open_mfdataset(
-            dir_model_output + varname_file + "_unfiltered_" + str(year) + "_*_.nc",
+            dir_model_output + varname_file + "_unfiltered_" + str(year) + model_suffix + "_*_.nc",
             join="outer",
         )
 
@@ -65,13 +67,22 @@ def process_model_output(
             year=year,
             dir_processed_model_output=dir_processed_model_output,
             varname="predicted_biomass",
+            model_suffix=model_suffix,
         )
         logging.info(fname_out)
         ds_filtered.to_dataset(name=varname_array).to_netcdf(fname_out, mode="w")
 
 
+def postprocess_ensemble(num_members: int = 50):
+    for i in np.arange(0, num_members):
+        model_suffix = f"_{i:04d}"
+        logging.info("Postprocessing ensemble # " + model_suffix)
+        process_model_output(model_suffix=model_suffix)
+
+
 def main():
-    process_model_output()
+    # process_model_output()
+    postprocess_ensemble()
 
 
 if __name__ == "__main__":

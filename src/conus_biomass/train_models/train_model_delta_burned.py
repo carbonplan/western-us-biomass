@@ -76,15 +76,13 @@ PREDICTOR_VARIABLES_MEAS2 = [
 
 OUTPUT_VARIABLE = "biomass_delta"
 
-FPATH_MODEL = dir_processed + "models/biomass_delta_burned_random_forest_model.pkl"
+FPATH_MODEL = dir_processed + "models/biomass_delta_burned_random_forest_model"
 
 FPATH_PREDICTORS = (
     dir_processed + "models/biomass_delta_burned_random_forest_model_variable_names.csv"
 )
 
-FPATH_MODEL_BACKWARDS = (
-    dir_processed + "models/biomass_delta_burned_random_forest_model_backwards.pkl"
-)
+FPATH_MODEL_BACKWARDS = dir_processed + "models/biomass_delta_burned_random_forest_model_backwards"
 
 FPATH_PREDICTORS_BACKWARDS = (
     dir_processed + "models/biomass_delta_burned_random_forest_model_variable_names_backwards.csv"
