@@ -66,7 +66,7 @@ def split_subcomponents(fia_data):
     return fia_data_burned, fia_data_undisturbed
 
 
-def main(model_suffix="", random_seed: int = 42):
+def train_all_models(model_suffix="", random_seed: int = 42, split_test_train=True):
     start_time = time.time()
 
     logging.info("Loading data")
@@ -78,17 +78,18 @@ def main(model_suffix="", random_seed: int = 42):
     )
 
     logging.info("Splitting testing and training data")
-    fia_data_test, fia_data_train = split_test_train(fia_data, random_seed=random_seed)
+    if split_test_train:
+        fia_data_test, fia_data_train = split_test_train(fia_data, random_seed=random_seed)
+    else:
+        fia_data_test = fia_data
+        fia_data_train = fia_data
 
     fia_data_train_burned, fia_data_train_undisturbed = split_subcomponents(fia_data_train)
-
     fia_data_test_burned, fia_data_test_undisturbed = split_subcomponents(fia_data_test)
 
-    fia_data_all_burned, fia_data_all_undisturbed = split_subcomponents(fia_data)
-
-    fia_data_all_burned["biomass_delta"] = fia_data_all_burned["biomass_delta"].where(
-        fia_data_all_burned["biomass_delta"] < 0, fia_data_all_burned["biomass_delta_per_year"]
-    )
+    # fia_data_all_burned["biomass_delta"] = fia_data_all_burned["biomass_delta"].where(
+    #    fia_data_all_burned["biomass_delta"] < 0, fia_data_all_burned["biomass_delta_per_year"]
+    # )
 
     # Initialization ---------------------------------- #
     logging.info("######### INITIAL BIOMASS ############")
@@ -142,6 +143,10 @@ def main(model_suffix="", random_seed: int = 42):
 
     end_time = time.time()
     logging.info(f"Elapsed time for all training: {end_time - start_time:.2f} seconds")
+
+
+def main():
+    train_all_models(model_suffix="", random_seed=42, split_test_train=True)
 
 
 if __name__ == "__main__":
