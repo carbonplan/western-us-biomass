@@ -73,15 +73,16 @@ def process_model_output(
         ds_filtered.to_dataset(name=varname_array).to_netcdf(fname_out, mode="w")
 
 
-def postprocess_ensemble(num_members: int = 3):
-    for i in np.arange(0, 3):
+def postprocess_ensemble(num_members: int = 50):
+    for i in np.arange(0, num_members):
         model_suffix = f"_{i:04d}"
         logging.info("Postprocessing ensemble # " + model_suffix)
         process_model_output(model_suffix=model_suffix)
 
 
 def main():
-    process_model_output()
+    # process_model_output()
+    postprocess_ensemble()
 
 
 if __name__ == "__main__":
