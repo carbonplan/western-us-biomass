@@ -34,10 +34,11 @@ def get_output_biomass(
     year: int,
     crs: str,
     dir_processed_model_output: str = dir_info.dir_model_output[:-1] + "_processed/",
+    model_suffix: str = "",
 ):
 
     fname = get_fname_processed_biomass(
-        dir_processed_model_output=dir_processed_model_output, year=year
+        dir_processed_model_output=dir_processed_model_output, year=year, model_suffix=model_suffix
     )
 
     da = xr.open_dataset(fname)["predicted_biomass"]
@@ -76,10 +77,14 @@ def clip_to_shape(da, shp):
 
 
 def calculate_state_stocks_from_gridded(
-    year: int, crs_this_res: str, grid_res: int, state_list: list = STATE_LIST
+    year: int,
+    crs_this_res: str,
+    grid_res: int,
+    state_list: list = STATE_LIST,
+    model_suffix: str = "",
 ):
     biomass_states = []
-    biomass_forest = get_output_biomass(year=year, crs=crs_this_res)
+    biomass_forest = get_output_biomass(year=year, crs=crs_this_res, model_suffix=model_suffix)
     for state in state_list:
         logging.info(state)
         shp_state = SHP[SHP["STUSPS"] == state]
@@ -100,16 +105,18 @@ def calculate_state_stocks_from_gridded(
     return df_year
 
 
-def main(
+def process_one_simulation(
     dir_output_csv: str = dir_info.dir_model_output[:-1] + "_processed/",
     years: np.array = np.arange(2005, 2023),
+    model_suffix: str = "",
 ):
+
     crs_this_res, grid_res = get_crs()
 
     for i, year in enumerate(years):
         logging.info(year)
         df_year = calculate_state_stocks_from_gridded(
-            year=year, crs_this_res=crs_this_res, grid_res=grid_res
+            year=year, crs_this_res=crs_this_res, grid_res=grid_res, model_suffix=model_suffix
         )
 
         if i == 0:
@@ -117,7 +124,24 @@ def main(
         else:
             df_all = pd.concat([df_all, df_year])
         df_all["estimate_type"] = "our_study"
-        df_all.to_csv(dir_output_csv + "MMTC_our_study.csv")
+        df_all.to_csv(dir_output_csv + "MMTC_our_study" + model_suffix + ".csv")
+
+
+def postprocess_ensemble(
+    num_members: int = 16,
+    dir_output_csv: str = dir_info.dir_model_output[:-1] + "_processed/",
+    years: np.array = np.arange(2005, 2023),
+):
+    for i in np.arange(0, num_members):
+        model_suffix = f"_{i:04d}"
+        logging.info("Postprocessing ensemble # " + model_suffix)
+        process_one_simulation(
+            dir_output_csv=dir_output_csv, years=years, model_suffix=model_suffix
+        )
+
+
+def main():
+    postprocess_ensemble(num_members=50)
 
 
 if __name__ == "__main__":
