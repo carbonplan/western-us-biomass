@@ -38,6 +38,7 @@ def plot_map(
     savefig: str = None,
     cbar_location: str = "right",
     ax=None,
+    add_colorbar: bool = True,
 ):
     plt.rcParams["font.size"] = 16
     if ax is None:
@@ -52,12 +53,19 @@ def plot_map(
             vmin=clims[0],
             vmax=clims[1],
             cmap=cmap,
-            cbar_kwargs={
-                "shrink": 0.7,
-                "pad": 0.02,
-                "orientation": "horizontal" if cbar_location in ["top", "bottom"] else "vertical",
-                "location": cbar_location,
-            },
+            add_colorbar=add_colorbar,
+            **(
+                {
+                    "cbar_kwargs": {
+                        "location": cbar_location,
+                        "orientation": (
+                            "horizontal" if cbar_location in ["top", "bottom"] else "vertical"
+                        ),
+                    }
+                }
+                if add_colorbar
+                else {}
+            ),
         )
 
         plt.xlim([-126, -101])
@@ -71,20 +79,32 @@ def plot_map(
             vmin=clims[0],
             vmax=clims[1],
             cmap=cmap,
-            cbar_kwargs={
-                "location": cbar_location,
-                "orientation": "horizontal" if cbar_location in ["top", "bottom"] else "vertical",
-            },
+            add_colorbar=add_colorbar,
+            **(
+                {
+                    "cbar_kwargs": {
+                        "location": cbar_location,
+                        "orientation": (
+                            "horizontal" if cbar_location in ["top", "bottom"] else "vertical"
+                        ),
+                    }
+                }
+                if add_colorbar
+                else {}
+            ),
         )
 
     plt.tight_layout()
     ax.set_axis_off()
     shp_plot.boundary.plot(ax=ax, color="gray", linewidth=1)
     plt.title(title)
-    im.colorbar.set_label(cbar_label, fontsize=20)
+    if add_colorbar:
+        im.colorbar.set_label(cbar_label, fontsize=20)
     plt.tight_layout()
     if savefig is not None:
         plt.savefig(savefig, bbox_inches="tight", dpi=500)
+
+    return ax
 
 
 def plot_hexbin_latlon(
