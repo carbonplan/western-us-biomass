@@ -1,4 +1,6 @@
+import glob
 import logging
+import re
 
 import numpy as np
 import xarray as xr
@@ -46,8 +48,27 @@ def process_model_output(
     inputs = xr.open_dataset(inputs_fname)
 
     for year in year_range:
+        if model_suffix == "":
+            pattern = dir_model_output + varname_file + "_unfiltered_" + str(year) + "_*.nc"
+            all_files = glob.glob(pattern)
+
+            # Filter out files with the _####_ pattern
+            regex = re.compile(rf"{varname_file}_unfiltered_{year}_(?!\d{{4}}_)\d+\.\d+_\.nc$")
+            files = [f for f in all_files if regex.search(f)]
+        else:
+            pattern = (
+                dir_model_output
+                + varname_file
+                + "_unfiltered_"
+                + str(year)
+                + model_suffix
+                + "_*.*_.nc"
+            )
+            files = glob.glob(pattern)
+
+        logging.info(len(files))
         ds = xr.open_mfdataset(
-            dir_model_output + varname_file + "_unfiltered_" + str(year) + model_suffix + "_*_.nc",
+            files,
             join="outer",
         )
 
@@ -66,7 +87,7 @@ def process_model_output(
         fname_out = get_fname_processed_biomass(
             year=year,
             dir_processed_model_output=dir_processed_model_output,
-            varname="predicted_biomass",
+            varname=varname_array,
             model_suffix=model_suffix,
         )
         logging.info(fname_out)
