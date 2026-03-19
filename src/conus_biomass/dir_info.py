@@ -28,12 +28,14 @@ dir_data_on_ref_grid = dir_processed + "data_on_ref_grid/"
 dir_model_output = dir_processed + "model_results/1000m_2026feb02/"
 dir_model_input = dir_processed + "data_on_ref_grid/1000m/"
 
-dir_figures = "/Users/clairezarakas/Documents/Science/conus-biomass/figures/"
+dir_figures = "/home/jovyan/czarakas/conus-biomass/figures/"
 dir_QAQC = "/data/homezvol3/czarakas/conus-biomass/figures/"
 
 ################ Other ################
 # Directories to processed_data
-dir_walters = "/dfs10/jranders_lab1/users/czarakas/US_FIA_based_reports/Walters_et_al_2024/By_State/"
+dir_walters = (
+    "/dfs10/jranders_lab1/users/czarakas/US_FIA_based_reports/Walters_et_al_2024/By_State/"
+)
 dir_EPA_2024 = "/Users/clairezarakas/Documents/Science/data/raw_data/EPA_GHG_emissions/allstateghgdata90-22_v082924/"
 dir_biomass = dir_processed + "output_biomass/"
 dir_forest_pct = dir_processed + "forest_pct/"
