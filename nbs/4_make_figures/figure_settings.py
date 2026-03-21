@@ -14,7 +14,7 @@ style_settings = {
     "axes.labelsize": 24,
     "xtick.labelsize": 24,
     "ytick.labelsize": 24,
-    "legend.fontsize": 24,
+    "legend.fontsize": 20,
     # Axes
     "axes.spines.top": True,
     "axes.spines.right": True,
@@ -22,6 +22,7 @@ style_settings = {
     "ytick.direction": "in",
     "xtick.top": True,
     "ytick.right": True,
+    "axes.labelpad": 10,
     # Lines
     "lines.linewidth": 8,
     # Layout
