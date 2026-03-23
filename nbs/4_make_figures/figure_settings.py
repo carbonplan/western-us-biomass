@@ -9,16 +9,16 @@ color_MTBS_light = "#FBBBA8"
 color_FIA_fire = "#E55713"
 
 # Figure 3 colors
-color_unburned = "#64b9c4"
+color_unburned = "#83BCA9"
 color_net = "#282B28"
-color_burned = "#f07071"
+color_burned = "#D36135"
 
 # Figure 5 colors
-color_CMIP = "#A24936"
-color_Liu = "#83BCA9"
+color_CMIP = "#525174"
+color_Liu = "#348aa7"
 color_this_study = "#282B28"
-color_Li = "#3E5641"
-color_EPA = "#D36135"
+color_Li = "#5dd39e"
+color_EPA = "#bce784"
 
 style_settings = {
     # Font
@@ -28,12 +28,12 @@ style_settings = {
         "Arial",
         "DejaVu Sans",
     ],
-    "font.size": 24,
-    "axes.titlesize": 26,
-    "axes.labelsize": 24,
-    "xtick.labelsize": 24,
-    "ytick.labelsize": 24,
-    "legend.fontsize": 20,
+    "font.size": 28,
+    "axes.titlesize": 30,
+    "axes.labelsize": 28,
+    "xtick.labelsize": 28,
+    "ytick.labelsize": 28,
+    "legend.fontsize": 22,
     # Axes
     "axes.spines.top": True,
     "axes.spines.right": True,
