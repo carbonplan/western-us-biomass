@@ -3,7 +3,7 @@
 # Define the range of model suffixes
 
 START=0
-END=49
+END=2
 
 # Loop through model suffixes and submit jobs
 for i in $(seq -f "%04g" $START $END); do
@@ -23,7 +23,7 @@ for i in $(seq -f "%04g" $START $END); do
 export PATH="\$HOME/.pixi/bin:\$PATH"
 pixi run python -c "
 from conus_biomass.train_models import train_all_models
-train_all_models.main(model_suffix='${suffix}', random_seed=None)
+train_all_models.train_all_models(model_suffix='${suffix}', random_seed=None)
 "
 EOF
     echo "Submitted job for model suffix: $suffix"
