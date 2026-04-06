@@ -13,15 +13,39 @@ pixi install
 pixi shell
 ```
 
-## Running the workflow
-#### Step 0: Process data
-##### 0a: process plot-level data (for training)
-##### 0b: process gridded data (for running model)
+## Processing input data
 
+
+## Run the workflow for an ensemble
+
+#### Step 1: Train model components
+```bash
+sbatch src/conus_biomass/train_models/submit_training_jobs.sh
+```
+
+#### Step 2: Run model
+```bash
+sbatch src/conus_biomass/run_model/submit_all_tiles_ensemble.sh
+```
+
+#### Step 3: Postprocess data
+```bash
+pixi run python src/conus_biomass/process_outputs/postprocess_output.py
+```
+
+#### Step 4: Make figures
+
+## Running the workflow (single run)
 #### Step 1: Train model components
 ```bash
 pixi run python src/conus_biomass/train_models/train_all_models.py
 ```
+
+When running ensemble:
+```bash
+sbatch src/conus_biomass/train_models/submit_training_jobs.sh
+```
+
 
 #### Step 2: Run model
 ```bash
@@ -34,4 +58,3 @@ pixi run python src/conus_biomass/process_outputs/postprocess_output.py
 ```
 
 #### Step 4: Make figures
-
