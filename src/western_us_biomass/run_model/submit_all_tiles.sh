@@ -17,4 +17,4 @@ ny=15
 xtile=$(( SLURM_ARRAY_TASK_ID / ny ))
 ytile=$(( SLURM_ARRAY_TASK_ID % ny ))
 
-pixi run python src/conus_biomass/run_model/run_model_spatially.py --xtile $xtile --ytile $ytile --model-suffix ""
+pixi run python src/western_us_biomass/run_model/run_model_spatially.py --xtile $xtile --ytile $ytile --model-suffix ""

@@ -22,7 +22,7 @@ for i in $(seq -f "%04g" $START $END); do
 #SBATCH --cpus-per-task=1
 
 export PATH="\$HOME/.pixi/bin:\$PATH"
-pixi run python src/conus_biomass/run_model/run_model_spatially.py --xtile 11 --ytile 2 --model-suffix "$suffix"
+pixi run python src/western_us_biomass/run_model/run_model_spatially.py --xtile 11 --ytile 2 --model-suffix "$suffix"
 EOF
 
     echo "Submitted job for model suffix: $suffix"

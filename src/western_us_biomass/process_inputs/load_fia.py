@@ -1,6 +1,6 @@
 import pandas as pd
 
-from conus_biomass.dir_info import dir_fia_csvs
+from western_us_biomass.dir_info import dir_fia_csvs
 
 try:
     ref_species_df = pd.read_csv(dir_fia_csvs + "fiadb_reference/REF_SPECIES.csv")

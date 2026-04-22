@@ -11,8 +11,8 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 
-from conus_biomass.dir_info import dir_lookups, dir_processed
-from conus_biomass.make_figures import plot_model_evaluation
+from western_us_biomass.dir_info import dir_lookups, dir_processed
+from western_us_biomass.make_figures import plot_model_evaluation
 
 logging.basicConfig(level=logging.INFO)
 

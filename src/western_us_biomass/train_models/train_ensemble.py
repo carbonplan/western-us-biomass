@@ -2,7 +2,7 @@ import logging
 
 import numpy as np
 
-from conus_biomass.train_models import train_all_models
+from western_us_biomass.train_models import train_all_models
 
 for i in np.arange(0, 3):
     model_suffix = f"_{i:04d}"

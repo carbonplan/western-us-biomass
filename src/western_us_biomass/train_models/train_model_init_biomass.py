@@ -1,6 +1,6 @@
 import logging
 
-from conus_biomass.dir_info import dir_processed
+from western_us_biomass.dir_info import dir_processed
 
 logging.basicConfig(level=logging.INFO)
 

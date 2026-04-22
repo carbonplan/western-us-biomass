@@ -5,8 +5,8 @@ import shap
 import sklearn
 import xarray as xr
 
-from conus_biomass.dir_info import dir_QAQC
-from conus_biomass.make_figures.maps import plot_hexbin_latlon
+from western_us_biomass.dir_info import dir_QAQC
+from western_us_biomass.make_figures.maps import plot_hexbin_latlon
 
 
 def plot_histograms(

@@ -1,7 +1,7 @@
 import geopandas as gpd
 import matplotlib.pyplot as plt
 
-from conus_biomass.dir_info import dir_shp
+from western_us_biomass.dir_info import dir_shp
 
 
 def get_western_state_shapefile(shp):

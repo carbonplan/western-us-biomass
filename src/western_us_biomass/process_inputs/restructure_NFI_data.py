@@ -4,11 +4,11 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 
-from conus_biomass import dir_info
-from conus_biomass.dir_info import dir_lookups
-from conus_biomass.process_inputs import load_prism
-from conus_biomass.process_inputs.load_fia import load_data
-from conus_biomass.unit_conversion import ACRES_PER_HECTARE, POUNDS_PER_METRIC_TON
+from western_us_biomass import dir_info
+from western_us_biomass.dir_info import dir_lookups
+from western_us_biomass.process_inputs import load_prism
+from western_us_biomass.process_inputs.load_fia import load_data
+from western_us_biomass.unit_conversion import ACRES_PER_HECTARE, POUNDS_PER_METRIC_TON
 
 INVALID_YEAR_THRESHOLD = 9000
 MIN_YEAR = 1981

@@ -5,7 +5,7 @@ import rioxarray as rioxr
 import xarray as xr
 from rasterio.enums import Resampling
 
-from conus_biomass import dir_info
+from western_us_biomass import dir_info
 
 
 def get_tree_cover_fname(dir_base=dir_info.dir_canopy_cover, year=2005):

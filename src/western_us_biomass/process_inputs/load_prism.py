@@ -6,7 +6,7 @@ import rasterio
 import xarray as xr
 from rasterio.transform import rowcol
 
-from conus_biomass.dir_info import dir_prism
+from western_us_biomass.dir_info import dir_prism
 
 
 def get_prism_dir(var="tmean"):

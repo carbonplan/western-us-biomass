@@ -20,17 +20,17 @@ pixi shell
 
 #### Step 1: Train model components
 ```bash
-sbatch src/conus_biomass/train_models/submit_training_jobs.sh
+sbatch src/western_us_biomass/train_models/submit_training_jobs.sh
 ```
 
 #### Step 2: Run model
 ```bash
-sbatch src/conus_biomass/run_model/submit_all_tiles_ensemble.sh
+sbatch src/western_us_biomass/run_model/submit_all_tiles_ensemble.sh
 ```
 
 #### Step 3: Postprocess data
 ```bash
-pixi run python src/conus_biomass/process_outputs/postprocess_output.py
+pixi run python src/western_us_biomass/process_outputs/postprocess_output.py
 ```
 
 #### Step 4: Make figures
@@ -38,23 +38,23 @@ pixi run python src/conus_biomass/process_outputs/postprocess_output.py
 ## Running the workflow (single run)
 #### Step 1: Train model components
 ```bash
-pixi run python src/conus_biomass/train_models/train_all_models.py
+pixi run python src/western_us_biomass/train_models/train_all_models.py
 ```
 
 When running ensemble:
 ```bash
-sbatch src/conus_biomass/train_models/submit_training_jobs.sh
+sbatch src/western_us_biomass/train_models/submit_training_jobs.sh
 ```
 
 
 #### Step 2: Run model
 ```bash
-sbatch src/conus_biomass/run_model/submit_all_tiles.sh
+sbatch src/western_us_biomass/run_model/submit_all_tiles.sh
 ```
 
 #### Step 3: Postprocess data
 ```bash
-pixi run python src/conus_biomass/process_outputs/postprocess_output.py
+pixi run python src/western_us_biomass/process_outputs/postprocess_output.py
 ```
 
 #### Step 4: Make figures

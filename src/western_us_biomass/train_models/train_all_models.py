@@ -4,8 +4,8 @@ import time
 import numpy as np
 import xarray as xr
 
-from conus_biomass.dir_info import dir_processed
-from conus_biomass.train_models import (
+from western_us_biomass.dir_info import dir_processed
+from western_us_biomass.train_models import (
     train_model_delta_burned,
     train_model_delta_unburned,
     train_model_init_biomass,

@@ -6,9 +6,9 @@ import pandas as pd
 import pyproj
 import xarray as xr
 
-from conus_biomass import dir_info
-from conus_biomass.process_outputs.postprocess_output import get_fname_processed_biomass
-from conus_biomass.settings import STATE_LIST
+from western_us_biomass import dir_info
+from western_us_biomass.process_outputs.postprocess_output import get_fname_processed_biomass
+from western_us_biomass.settings import STATE_LIST
 
 logging.basicConfig(level=logging.INFO)
 

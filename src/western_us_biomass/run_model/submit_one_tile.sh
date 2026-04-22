@@ -9,7 +9,7 @@
 
 #source /opt/apps/anaconda/2024.06/etc/profile.d/conda.sh
 #conda activate uncertain_land_sink
-#python src/conus_biomass/run_model/run_model_spatially.py --xtile 11 --ytile 2
+#python src/western_us_biomass/run_model/run_model_spatially.py --xtile 11 --ytile 2
 
 export PATH="$HOME/.pixi/bin:$PATH"
-pixi run python src/conus_biomass/run_model/run_model_spatially.py --xtile 2 --ytile 1 --model-suffix "_0034"
+pixi run python src/western_us_biomass/run_model/run_model_spatially.py --xtile 2 --ytile 1 --model-suffix "_0034"

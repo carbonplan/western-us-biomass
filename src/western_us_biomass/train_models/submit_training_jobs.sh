@@ -22,7 +22,7 @@ for i in $(seq -f "%04g" $START $END); do
 
 export PATH="\$HOME/.pixi/bin:\$PATH"
 pixi run python -c "
-from conus_biomass.train_models import train_all_models
+from western_us_biomass.train_models import train_all_models
 train_all_models.train_all_models(model_suffix='${suffix}', random_seed=None)
 "
 EOF

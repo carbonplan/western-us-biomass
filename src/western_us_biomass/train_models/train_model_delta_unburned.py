@@ -1,20 +1,19 @@
 import logging
 
-from conus_biomass.dir_info import dir_processed
+from western_us_biomass.dir_info import dir_processed
 
 logging.basicConfig(level=logging.INFO)
 
 # Static predictors to use
 FIA_VARIABLE_PREDICTORS = [
-    # FIA variables
-    # "FORTYPCD_GRP",
+    # FIA and FIA-derived variables
     "SLOPE_preliminary",
     "ASPECT_preliminary",
     # "ELEV_preliminary",
     "Ecosection_code",
     "Ecoprovince_code",
     "pct_own_public",
-    "delta_live_canopy_cvr_pct",
+    "delta_live_canopy_cvr_pct_per_year",
     "biomass_start",
     # PRISM variables
     "tmean_clim_mean",
@@ -26,20 +25,13 @@ FIA_VARIABLE_PREDICTORS = [
 
 # Time-varying predictors to use from the first measurement time
 PREDICTOR_VARIABLES_MEAS1 = [
-    # "QMD",
-    # "STDAGE",
     # "LIVE_CANOPY_CVR_PCT",
-    # "LIVE_MISSING_CANOPY_CVR_PCT",
-    # "NBR_LIVE_STEMS",
-    # "STDSZCD",
-    # "SITECLCD",
-    # "LAND_COVER_CLASS_CD",
 ]
 
 # Time-varying predictors to use from the second measurement time
 PREDICTOR_VARIABLES_MEAS2 = [
-    # "LIVE_CANOPY_CVR_PCT",
     # PRISM variables
+    # "LIVE_CANOPY_CVR_PCT",
     # "tmean_minseason_anom",
     # "tmeanmaxseason_anom",
     # "tmean_mean_anom",
@@ -57,21 +49,24 @@ PREDICTOR_VARIABLES_MEAS2 = [
     # "vpdmax_mean_anom",
     # FIA variables
     # "years_after_harvest",
-    # "years_after_fire",
-    # "years_after_harvest",
+    "years_after_fire",
+    # "years_since_disturbance_Uconn",
     # "years_after_drought",
 ]
 
-OUTPUT_VARIABLE = "biomass_delta"
+OUTPUT_VARIABLE = "biomass_delta_per_year"
 
-FPATH_MODEL = dir_processed + "models/biomass_delta_burned_random_forest_model"
+FPATH_MODEL = dir_processed + "models/biomass_delta_undisturbed_random_forest_model"
 
 FPATH_PREDICTORS = (
-    dir_processed + "models/biomass_delta_burned_random_forest_model_variable_names.csv"
+    dir_processed + "models/biomass_delta_undisturbed_random_forest_model_variable_names.csv"
 )
 
-FPATH_MODEL_BACKWARDS = dir_processed + "models/biomass_delta_burned_random_forest_model_backwards"
+FPATH_MODEL_BACKWARDS = (
+    dir_processed + "models/biomass_delta_undisturbed_random_forest_model_backwards"
+)
 
 FPATH_PREDICTORS_BACKWARDS = (
-    dir_processed + "models/biomass_delta_burned_random_forest_model_variable_names_backwards.csv"
+    dir_processed
+    + "models/biomass_delta_undisturbed_random_forest_model_variable_names_backwards.csv"
 )

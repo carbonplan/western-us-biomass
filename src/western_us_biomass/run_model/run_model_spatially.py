@@ -8,8 +8,8 @@ import pandas as pd
 import sklearn
 import xarray as xr
 
-from conus_biomass import dir_info
-from conus_biomass.train_models import (
+from western_us_biomass import dir_info
+from western_us_biomass.train_models import (
     train_model_delta_burned,
     train_model_delta_unburned,
     train_model_init_biomass,

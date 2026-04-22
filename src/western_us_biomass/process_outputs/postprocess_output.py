@@ -5,7 +5,7 @@ import re
 import numpy as np
 import xarray as xr
 
-from conus_biomass import dir_info
+from western_us_biomass import dir_info
 
 logging.basicConfig(level=logging.INFO)
 
