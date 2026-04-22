@@ -25,7 +25,7 @@ dir_years_forest = dir_processed + "years_as_forest/"
 
 ################ Model inputs and outputs ################
 dir_data_on_ref_grid = dir_processed + "data_on_ref_grid/"
-dir_model_output = dir_processed + "model_results/1000m_2026feb02/"
+dir_model_output = dir_processed + "model_results/1000m_2026apr05/"
 dir_model_input = dir_processed + "data_on_ref_grid/1000m/"
 
 dir_figures = "/home/jovyan/czarakas/conus-biomass/figures/"

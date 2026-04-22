@@ -32,7 +32,9 @@ def load_data(
     return fia_data
 
 
-def split_test_train(fia_data, random_seed: int = 42):
+def split_test_train(
+    fia_data, random_seed: int = 42, model_suffix: str = "", save_splits: bool = True
+):
 
     plotids = np.unique(fia_data.plotid.values)
 
@@ -52,6 +54,11 @@ def split_test_train(fia_data, random_seed: int = 42):
     fia_data_test = fia_data.where(fia_data["plotid"].isin(test_plotids), drop=True)
     fia_data_train = fia_data.where(is_train, drop=True)
 
+    if save_splits:
+        fname_out_train = dir_processed + "models/train_plotids" + model_suffix + ".nc"
+
+        is_train.to_dataset(name="is_train").to_netcdf(fname_out_train)
+
     return fia_data_test, fia_data_train
 
 
@@ -66,7 +73,7 @@ def split_subcomponents(fia_data):
     return fia_data_burned, fia_data_undisturbed
 
 
-def train_all_models(model_suffix="", random_seed: int = 42, split_test_train=True):
+def train_all_models(model_suffix="", random_seed: int = 42, split_test_train_bool=True):
     start_time = time.time()
 
     logging.info("Loading data")
@@ -78,8 +85,10 @@ def train_all_models(model_suffix="", random_seed: int = 42, split_test_train=Tr
     )
 
     logging.info("Splitting testing and training data")
-    if split_test_train:
-        fia_data_test, fia_data_train = split_test_train(fia_data, random_seed=random_seed)
+    if split_test_train_bool:
+        fia_data_test, fia_data_train = split_test_train(
+            fia_data, random_seed=random_seed, model_suffix=model_suffix
+        )
     else:
         fia_data_test = fia_data
         fia_data_train = fia_data
@@ -146,7 +155,7 @@ def train_all_models(model_suffix="", random_seed: int = 42, split_test_train=Tr
 
 
 def main():
-    train_all_models(model_suffix="", random_seed=42, split_test_train=True)
+    train_all_models(model_suffix="", random_seed=42, split_test_train_bool=True)
 
 
 if __name__ == "__main__":

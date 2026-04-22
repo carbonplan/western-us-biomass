@@ -7,33 +7,20 @@ logging.basicConfig(level=logging.INFO)
 # Static predictors to use
 FIA_VARIABLE_PREDICTORS = [
     # FIA and FIA-derived variables
-    "Ecosection_code",
-    "Ecoprovince_code",
     "SLOPE_preliminary",
     "ASPECT_preliminary",
-    "ELEV_preliminary",
-    # "FORTYPCD_GRP",
-    # "lat",
-    # "lon",
+    # "ELEV_preliminary",
+    "Ecosection_code",
+    "Ecoprovince_code",
     "pct_own_public",
-    "biomass_start",
     "delta_live_canopy_cvr_pct_per_year",
+    "biomass_start",
     # PRISM variables
-    # "tmean_clim_minseason",
-    # "tmean_clim_maxseason",
     "tmean_clim_mean",
-    # "ppt_clim_minseason",
-    "ppt_clim_maxseason",
     "ppt_clim_mean",
-    # "tmax_clim_minseason",
     "tmax_clim_maxseason",
-    # "tmax_clim_mean",
     "tmin_clim_minseason",
-    # "tmin_clim_maxseason",
-    # "tmin_clim_mean",
-    # "vpdmax_clim_minseason",
     "vpdmax_clim_maxseason",
-    # "vpdmax_clim_mean",
 ]
 
 # Time-varying predictors to use from the first measurement time

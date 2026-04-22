@@ -85,7 +85,7 @@ def load_data(
     return fia_data
 
 
-def calculate_change_in_var(fia_data: xr.Dataset, var: str) -> xr.DataArray:
+def calculate_change_in_var(fia_data: xr.Dataset, var: str = "LIVE_CANOPY_CVR_PCT") -> xr.DataArray:
     """Calculate the change in a variable between two measurement years.
 
     Args:
@@ -95,9 +95,9 @@ def calculate_change_in_var(fia_data: xr.Dataset, var: str) -> xr.DataArray:
     Returns:
         xr.DataArray: The change in the variable between the two measurement years.
     """
-    var_at_measyear2 = fia_data["LIVE_CANOPY_CVR_PCT"].sel(year=fia_data["measyear_2"])
+    var_at_measyear2 = fia_data[var].sel(year=fia_data["measyear_2"])
 
-    var_at_measyear1 = fia_data["LIVE_CANOPY_CVR_PCT"].sel(year=fia_data["measyear_1"])
+    var_at_measyear1 = fia_data[var].sel(year=fia_data["measyear_1"])
 
     delta_var = var_at_measyear2 - var_at_measyear1
 

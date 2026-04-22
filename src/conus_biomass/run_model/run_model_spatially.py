@@ -192,7 +192,7 @@ def calculate_delta_biomass(
     fpath_predictor_list_burned=PREDICTORS["burned"],
     models=None,
     fia_plot_data=None,
-    save_components=False,
+    save_components=True,
     inputs_2d=None,
     tile_ind="",
     model_suffix="",

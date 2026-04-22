@@ -94,7 +94,7 @@ def process_model_output(
         ds_filtered.to_dataset(name=varname_array).to_netcdf(fname_out, mode="w")
 
 
-def postprocess_ensemble(num_members: int = 50):
+def postprocess_ensemble(num_members: int = 3):
     for i in np.arange(0, num_members):
         model_suffix = f"_{i:04d}"
         logging.info("Postprocessing ensemble # " + model_suffix)

@@ -45,11 +45,14 @@ def calculate_ds_binned(
         # Separate variables by whether they have year dimension
 
         # 1. Year-dependent variables
-        df_year = df[["lat_bin", "lon_bin", "year"] + vars_year]
-        grouped_year = (
-            df_year.groupby(["lat_bin", "lon_bin", "year"]).mean(numeric_only=True).reset_index()
-        )
-        ds_binned_year = grouped_year.set_index(["lat_bin", "lon_bin", "year"]).to_xarray()
+        if len(vars_year) > 0:
+            df_year = df[["lat_bin", "lon_bin", "year"] + vars_year]
+            grouped_year = (
+                df_year.groupby(["lat_bin", "lon_bin", "year"])
+                .mean(numeric_only=True)
+                .reset_index()
+            )
+            ds_binned_year = grouped_year.set_index(["lat_bin", "lon_bin", "year"]).to_xarray()
 
         # 2. Year-independent variables
         df_static = df[["lat_bin", "lon_bin"] + vars_static]
@@ -59,7 +62,10 @@ def calculate_ds_binned(
         ds_binned_static = grouped_static.set_index(["lat_bin", "lon_bin"]).to_xarray()
 
         # 3. Merge datasets
-        ds_binned = xr.merge([ds_binned_static, ds_binned_year])
+        if len(vars_year) > 0:
+            ds_binned = xr.merge([ds_binned_static, ds_binned_year])
+        else:
+            ds_binned = ds_binned_static
 
         ds_binned = ds_binned.assign_coords(
             {
