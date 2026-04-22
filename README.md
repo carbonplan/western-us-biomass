@@ -3,8 +3,8 @@
 ## Setting up environment
 ```bash
 # Clone the repository
-git clone https://github.com/carbonplan/conus-biomass.git
-cd conus-biomass
+git clone https://github.com/carbonplan/western-us-biomass.git
+cd western-us-biomass
 
 # Install dependencies with pixi
 pixi install
