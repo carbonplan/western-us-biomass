@@ -1,6 +1,6 @@
 # conus-biomass
 
-## Setting up environment
+## Set up the environment
 ```bash
 # Clone the repository
 git clone https://github.com/carbonplan/western-us-biomass.git
@@ -13,48 +13,32 @@ pixi install
 pixi shell
 ```
 
-## Processing input data
-
-
-## Run the workflow for an ensemble
-
-#### Step 1: Train model components
-```bash
-sbatch src/western_us_biomass/train_models/submit_training_jobs.sh
-```
-
-#### Step 2: Run model
-```bash
-sbatch src/western_us_biomass/run_model/submit_all_tiles_ensemble.sh
-```
-
-#### Step 3: Postprocess data
-```bash
-pixi run python src/western_us_biomass/process_outputs/postprocess_output.py
-```
-
-#### Step 4: Make figures
-
-## Running the workflow (single run)
-#### Step 1: Train model components
+## Train model components
+To train a single ensemble member:
 ```bash
 pixi run python src/western_us_biomass/train_models/train_all_models.py
 ```
 
-When running ensemble:
+To train multiple ensemble members:
 ```bash
 sbatch src/western_us_biomass/train_models/submit_training_jobs.sh
 ```
 
+## Run the model
+To run multiple ensemble members:
+```bash
+sbatch src/western_us_biomass/run_model/submit_all_tiles_ensemble.sh
+```
 
-#### Step 2: Run model
+To run a single ensemble member:
 ```bash
 sbatch src/western_us_biomass/run_model/submit_all_tiles.sh
 ```
 
-#### Step 3: Postprocess data
+## Postprocess the model output
 ```bash
 pixi run python src/western_us_biomass/process_outputs/postprocess_output.py
 ```
 
-#### Step 4: Make figures
+## Make figures
+Navigate to ```nbs/4_make_figures/``` and run notebooks corresponding to each figure. Each figure is split into two notebooks: one notebook that processes all data for the figure into smaller intemediate data files, and another notebook that generates the figure from that data.
