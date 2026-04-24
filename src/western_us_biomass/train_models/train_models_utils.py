@@ -50,12 +50,12 @@ def get_ecosection_lists():
 
 
 def load_data(
-    fpath: str = dir_processed + "restructured_FIA/*_FIA_plots_and_PRISM_v7.nc",
+    fpath: str = dir_processed + "restructured_FIA/*_FIA_plots_and_PRISM_v9.nc",
 ) -> xr.Dataset:
     """Load the FIA dataset and calculate a couple of additional variables.
 
     Args:
-        fpath (str, optional): File path to the FIA dataset. Defaults to dir_processed + "*_FIA_plots_and_PRISM_v5.nc".
+        fpath (str, optional): File path to the FIA dataset.
 
     Returns:
         xr.Dataset: The loaded FIA dataset.

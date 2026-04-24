@@ -128,7 +128,7 @@ def process_one_simulation(
 
 
 def postprocess_ensemble(
-    num_members: int = 16,
+    num_members: int = 10,
     dir_output_csv: str = dir_info.dir_model_output[:-1] + "_processed/",
     years: np.array = np.arange(2005, 2023),
 ):
@@ -141,7 +141,7 @@ def postprocess_ensemble(
 
 
 def main():
-    postprocess_ensemble(num_members=50)
+    postprocess_ensemble(num_members=3)
 
 
 if __name__ == "__main__":

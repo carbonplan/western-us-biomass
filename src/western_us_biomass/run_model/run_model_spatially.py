@@ -69,10 +69,15 @@ def get_var_2d(var: str, year: int = None, inputs_2d=None):
     else:
         var_str = var
 
-    if year is None:
-        da = inputs_2d[var_str]
-    else:
-        da = inputs_2d[var_str].sel(year=year)
+    if var_str not in inputs_2d.data_vars:
+        logging.warning(
+            "Variable '%s' not found in inputs_2d; returning NaN array instead.", var_str
+        )
+
+
+    da = inputs_2d[var_str]
+    if year is not None and "year" in da.dims:
+        da = da.sel(year=year)
 
     return da
 
@@ -81,6 +86,7 @@ def prepare_input_data(
     fpath_predictor_list: str = PREDICTORS["unburned"],
     fia_plot_data=None,
     inputs_2d=None,
+    year: int = None,
     **kwargs,
 ) -> list:
     """Prepare input data for the model."""
@@ -101,16 +107,22 @@ def prepare_input_data(
         "delta_live_canopy_cvr_pct": "delta_live_canopy_cvr",
     }
 
-    var_lookup = {"STDAGE_start": "STDAGE", "ecosection": "Ecosection"}
+    var_lookup = {"STDAGE_start": "STDAGE", "ecosection": "Ecosection",
+                  "tmean_mean_10yr_start": "tmean_mean_10yr",
+"ppt_mean_10yr_start": "ppt_mean_10yr",
+"tmax_maxseason_10yr_start": "tmax_maxseason_10yr",
+"tmin_minseason_10yr_start": "tmin_minseason_10yr",
+"vpdmax_maxseason_10yr_start": "vpdmax_maxseason_10yr"
+                 }
 
     for i, predictor in enumerate(predictors[0]):
         if predictor in time_varying_vars:
             kwarg_name = time_varying_vars[predictor]
             predictor_series = kwargs.get(kwarg_name, None)
         elif predictor in var_lookup:
-            predictor_series = get_var_2d(var=var_lookup[predictor], inputs_2d=inputs_2d)
+            predictor_series = get_var_2d(var=var_lookup[predictor], year=year, inputs_2d=inputs_2d)
         else:
-            predictor_series = get_var_2d(var=predictor, inputs_2d=inputs_2d)
+            predictor_series = get_var_2d(var=predictor, year=year,inputs_2d=inputs_2d)
 
         if i == 0:
             df_inputs = predictor_series.to_dataset(name=predictor)
@@ -192,7 +204,7 @@ def calculate_delta_biomass(
     fpath_predictor_list_burned=PREDICTORS["burned"],
     models=None,
     fia_plot_data=None,
-    save_components=True,
+    save_components=False,
     inputs_2d=None,
     tile_ind="",
     model_suffix="",
@@ -218,6 +230,7 @@ def calculate_delta_biomass(
         years_after_fire=years_since_fire,
         fia_plot_data=fia_plot_data,
         inputs_2d=inputs_2d,
+        year=year,
         delta_live_canopy_cvr=delta_live_canopy_cvr,
         **kwargs,
     )
@@ -238,6 +251,7 @@ def calculate_delta_biomass(
         years_after_fire=years_since_fire,
         fia_plot_data=fia_plot_data,
         inputs_2d=inputs_2d,
+        year=year,
         delta_live_canopy_cvr=delta_live_canopy_cvr_twoyear,
         **kwargs,
     )
@@ -359,6 +373,7 @@ def initialize_biomass(
         years_after_fire=years_since_fire_initial,
         canopy_cover=get_var_2d(var="LIVE_CANOPY_CVR_PCT", year=year, inputs_2d=inputs_2d),
         inputs_2d=inputs_2d,
+        year=year,
     )
 
     predicted_biomass_start = predict_biomass(

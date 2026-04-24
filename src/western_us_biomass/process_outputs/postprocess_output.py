@@ -94,12 +94,22 @@ def process_model_output(
         ds_filtered.to_dataset(name=varname_array).to_netcdf(fname_out, mode="w")
 
 
-def postprocess_ensemble(num_members: int = 3):
-    for i in np.arange(0, num_members):
+def postprocess_ensemble(ensemble_list=np.arange(0, 10)):
+    for i in ensemble_list:
         model_suffix = f"_{i:04d}"
         logging.info("Postprocessing ensemble # " + model_suffix)
-        process_model_output(model_suffix=model_suffix)
-
+        process_model_output(model_suffix=model_suffix,
+                            varname_file = "predicted_biomass",
+                             varname_array = "predicted_biomass")
+    process_model_output(model_suffix="",
+                            varname_file = "predicted_biomass",
+                             varname_array = "predicted_biomass")
+    process_model_output(model_suffix="",
+                            varname_file = "unburned_predicted_biomass",
+                            varname_array = "predicted_biomass_delta_unburned")
+    process_model_output(model_suffix="",
+                            varname_file = "burned_predicted_biomass",
+                            varname_array = "predicted_biomass_delta_burned")
 
 def main():
     # process_model_output()

@@ -14,7 +14,7 @@ from western_us_biomass.train_models import (
 
 
 def load_data(
-    fpath=dir_processed + "restructured_FIA/" + "*_FIA_plots_and_PRISM_v8.nc", condprop_filter=True
+    fpath=dir_processed + "restructured_FIA/" + "*_FIA_plots_and_PRISM_v9.nc", condprop_filter=True
 ):
     fia_data = train_models_utils.load_data(fpath)
     if condprop_filter:
@@ -111,8 +111,8 @@ def train_all_models(model_suffix="", random_seed: int = 42, split_test_train_bo
         path_input_variable_names=train_model_init_biomass.FPATH_PREDICTORS,
         fia_data_train=fia_data_train,
         fia_data_test=fia_data_test,
-        max_depth=40,
-        n_estimators=200,
+        max_depth=30,
+        n_estimators=300,
         min_child_weight=1,
     )
 
@@ -127,8 +127,8 @@ def train_all_models(model_suffix="", random_seed: int = 42, split_test_train_bo
         path_input_variable_names=train_model_delta_burned.FPATH_PREDICTORS,
         fia_data_train=fia_data_train_burned,
         fia_data_test=fia_data_test_burned,
-        max_depth=15,
-        n_estimators=500,
+        max_depth=30,
+        n_estimators=300,
         min_child_weight=3,
         max_cat_threshold=10,
     )
@@ -155,7 +155,7 @@ def train_all_models(model_suffix="", random_seed: int = 42, split_test_train_bo
 
 
 def main():
-    train_all_models(model_suffix="", random_seed=42, split_test_train_bool=True)
+    train_all_models(model_suffix="", random_seed=42, split_test_train_bool=False)
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@
 # Define the range of model suffixes
 
 START=0
-END=99
+END=1000
 
 # Loop through model suffixes and submit jobs
 for i in $(seq -f "%04g" $START $END); do

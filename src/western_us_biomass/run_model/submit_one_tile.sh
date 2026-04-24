@@ -12,4 +12,4 @@
 #python src/western_us_biomass/run_model/run_model_spatially.py --xtile 11 --ytile 2
 
 export PATH="$HOME/.pixi/bin:$PATH"
-pixi run python src/western_us_biomass/run_model/run_model_spatially.py --xtile 2 --ytile 1 --model-suffix "_0034"
+pixi run python src/western_us_biomass/run_model/run_model_spatially.py --xtile 2 --ytile 1 --model-suffix ""

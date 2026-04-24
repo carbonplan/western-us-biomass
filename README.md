@@ -34,12 +34,12 @@ pixi shell
 #### Train model components
 To train a single ensemble member:
 ```bash
-pixi run python src/western_us_biomass/train_models/train_all_models.py
+sbatch src/western_us_biomass/train_models/submit_training_jobs_one_run.sh
 ```
 
 To train multiple ensemble members:
 ```bash
-sbatch src/western_us_biomass/train_models/submit_training_jobs.sh
+sbatch src/western_us_biomass/train_models/submit_training_jobs_ensemble.sh
 ```
 
 #### Run the model
@@ -50,12 +50,13 @@ sbatch src/western_us_biomass/run_model/submit_all_tiles_ensemble.sh
 
 To run a single ensemble member:
 ```bash
-sbatch src/western_us_biomass/run_model/submit_all_tiles.sh
+sbatch src/western_us_biomass/run_model/submit_all_tiles_single_run.sh
 ```
 
 #### Postprocess the model output
 ```bash
-pixi run python src/western_us_biomass/process_outputs/postprocess_output.py
+cd src/western_us_biomass/process_outputs
+sbatch postprocess_output.sh
 ```
 
 #### Make figures
