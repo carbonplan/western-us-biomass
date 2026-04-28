@@ -1,3 +1,4 @@
+import argparse
 import glob
 import logging
 import re
@@ -94,27 +95,33 @@ def process_model_output(
         ds_filtered.to_dataset(name=varname_array).to_netcdf(fname_out, mode="w")
 
 
-def postprocess_ensemble(ensemble_list=np.arange(0, 10)):
+def postprocess_ensemble(ensemble_list=np.arange(10, 70), process_components=False):
     for i in ensemble_list:
         model_suffix = f"_{i:04d}"
         logging.info("Postprocessing ensemble # " + model_suffix)
         process_model_output(model_suffix=model_suffix,
                             varname_file = "predicted_biomass",
                              varname_array = "predicted_biomass")
-    process_model_output(model_suffix="",
+    if process_components:
+        process_model_output(model_suffix="",
                             varname_file = "predicted_biomass",
                              varname_array = "predicted_biomass")
-    process_model_output(model_suffix="",
+        process_model_output(model_suffix="",
                             varname_file = "unburned_predicted_biomass",
                             varname_array = "predicted_biomass_delta_unburned")
-    process_model_output(model_suffix="",
+        process_model_output(model_suffix="",
                             varname_file = "burned_predicted_biomass",
                             varname_array = "predicted_biomass_delta_burned")
 
-def main():
+def main(start=320, end=330):
     # process_model_output()
-    postprocess_ensemble()
+    postprocess_ensemble(ensemble_list=np.arange(start, end))
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--start", type=int, required=True)
+    parser.add_argument("--end", type=int, required=True)
+    args = parser.parse_args()
+
+    main(start=args.start, end=args.end)

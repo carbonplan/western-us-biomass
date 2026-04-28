@@ -128,11 +128,11 @@ def process_one_simulation(
 
 
 def postprocess_ensemble(
-    num_members: int = 10,
+    ensemble_list=np.arange(0, 10),
     dir_output_csv: str = dir_info.dir_model_output[:-1] + "_processed/",
     years: np.array = np.arange(2005, 2023),
 ):
-    for i in np.arange(0, num_members):
+    for i in ensemble_list:
         model_suffix = f"_{i:04d}"
         logging.info("Postprocessing ensemble # " + model_suffix)
         process_one_simulation(
@@ -141,7 +141,7 @@ def postprocess_ensemble(
 
 
 def main():
-    postprocess_ensemble(num_members=3)
+    postprocess_ensemble(ensemble_list=np.arange(100, 189))
 
 
 if __name__ == "__main__":
